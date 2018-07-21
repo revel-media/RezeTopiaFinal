@@ -492,6 +492,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
                                 postResponse.setPostId(jsonObject.getInt("post_id"));
                                 postResponse.setUsername(jsonObject.getString("username"));
                                 postResponse.setCreatedAt(jsonObject.getString("createdAt"));
+                                postResponse.setLocation(jsonObject.getString("location"));
                                 if (jsonObject.getString("text") != null && !jsonObject.getString("text").isEmpty()) {
                                     postResponse.setText(jsonObject.getString("text"));
                                 }
@@ -604,14 +605,61 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
                 new Response.Listener<NetworkResponse>() {
                     @Override
                     public void onResponse(NetworkResponse response) {
+                        PostResponse postResponse = new PostResponse();
                         try {
                             String utf8String = new String(response.data, "UTF-8");
                             Log.i("responseString", "onResponse: " + utf8String);
-                            loader.stopProgress();
+                            JSONObject jsonObject = new JSONObject(utf8String);
+
+                            if (jsonObject.getInt("post_id") > 0) {
+                                postResponse.setUserId(userId);
+                                postResponse.setPostId(jsonObject.getInt("post_id"));
+                                postResponse.setUsername(jsonObject.getString("username"));
+                                postResponse.setCreatedAt(jsonObject.getString("created_at"));
+                                postResponse.setLocation(jsonObject.getString("location"));
+                                if (jsonObject.getString("text") != null && !jsonObject.getString("text").isEmpty()) {
+                                    postResponse.setText(jsonObject.getString("text"));
+                                }
+
+                                Attachment attachmentResponse = new Attachment();
+                                if (jsonObject.getJSONArray("image_url") != null && jsonObject.getJSONArray("image_url").length() > 0) {
+                                    JSONArray urls = jsonObject.getJSONArray("image_url");
+
+                                    Media[] mediaArray = new Media[urls.length()];
+                                    for (int i = 0; i < urls.length(); i++) {
+                                        Log.i("CreatePostResponse", "onResponse: " + urls.getString(i));
+                                        Media media = new Media();
+                                        media.setPath(urls.getString(i));
+                                        mediaArray[i] = media;
+                                    }
+                                    attachmentResponse.setImages(mediaArray);
+                                    postResponse.setAttachment(attachmentResponse);
+                                }
+
+                                if (jsonObject.getString("video_url") != null && jsonObject.getString("video_url").length() > 0){
+                                    Media media = new Media();
+                                    media.setPath(jsonObject.getString("video_url"));
+                                    attachmentResponse.setVideos(new Media[]{media});
+                                    postResponse.setAttachment(attachmentResponse);
+                                }
+                            } else {
+                                loader.stopProgress();
+                            }
+
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        //String responseString = new String(response.data);
+
+                        if (postResponse.getPostId() > 0) {
+                            Intent intent = new Intent();
+                            intent.putExtra("post", postResponse);
+                            setResult(RESULT_OK, intent);
+                            onBackPressed();
+                        } else {
+                            loader.stopProgress();
+                        }
 
                     }
                 }, new Response.ErrorListener() {

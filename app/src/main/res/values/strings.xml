@@ -9,6 +9,7 @@
     <string name="skip_login">skip log in</string>
     <string name="mobile">Mobile</string>
     <string name="name">Name</string>
+    <string name="player_name">Player Name</string>
     <string name="email">Email</string>
     <string name="date_of_birth">Date Of Birth</string>
     <string name="repassword">Re-Password</string>
@@ -23,8 +24,9 @@
     <string name="slide_1_desc">RezeTopia has also launched the initiative"play with the lights on" in marketing for the professional players in the Egyptian and European clubs who can not promote their skills</string>
     <string name="sign_up_with_facebook">sign up with facebook</string>
     <string name="rezetopia">Rezetopia</string>
-    <string name="number_of_matches">Number of matches</string>
-    <string name="number_of_players">Number of players</string>
+    <string name="number_of_teams"># teams</string>
+    <string name="number_of_players"># players</string>
+    <string name="six">6</string>
 
 
     <string name="phone">Phone number</string>
@@ -153,6 +155,7 @@
     <string name="interested">Interested</string>
     <string name="vendors">Vendors</string>
     <string name="teams">Teams</string>
+    <string name="team">Team</string>
     <string name="discussion">Discussion</string>
     <string name="occur_date">Takes place at: </string>
     <string name="create">Create</string>
@@ -384,6 +387,8 @@
     <string name="action_attach">ATTACH</string>
     <string name="action_capture">CAPTURE IMAGE</string>
 
+    <string name="today_matches">Today Matches</string>
+    <string name="create_champion">Create Champion</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="loading">Loading</string>
@@ -394,6 +399,7 @@
     <string name="closed_group_label">Closed group</string>
     <string name="secret_group_label">Secret group</string>
     <string name="createGroupLabel">Create group</string>
+    <string name="champion_label">Champions</string>
     <string name="submit">Submit</string>
     <string name="add_friends">Add</string>
     <string name="group_name_label">Group Name</string>

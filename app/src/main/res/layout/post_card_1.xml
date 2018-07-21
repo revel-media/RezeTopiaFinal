@@ -116,6 +116,12 @@
                     android:text="@string/post_small"
                     android:textColor="@color/black"/>
 
+                <TextView
+                    android:layout_marginStart="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/atLocation"/>
+
 
             </LinearLayout>
 
@@ -162,6 +168,15 @@
         android:layout_marginRight="5dp"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
+
+    <VideoView
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_below="@id/postTextView"
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true" />
 
     <ImageView
         android:layout_marginTop="5dp"

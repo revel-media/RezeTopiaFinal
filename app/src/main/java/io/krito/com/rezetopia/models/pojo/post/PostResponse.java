@@ -42,6 +42,19 @@ public class PostResponse implements Serializable{
     @Expose
     private String imageUrl;
 
+    @SerializedName("location")
+    @Expose
+    private String location;
+
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }

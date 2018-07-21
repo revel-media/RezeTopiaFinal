@@ -540,6 +540,7 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         ImageView postSideMenu;
         Button postShareButton;
         ImageView verifyView;
+        TextView atLocation;
         ImageView image1;
         ImageView image2;
         ImageView image3;
@@ -558,6 +559,7 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             postSideMenu = itemView.findViewById(R.id.postSideMenu);
             postShareButton = itemView.findViewById(R.id.postShareButton);
             verifyView = itemView.findViewById(R.id.verifyView);
+            atLocation = itemView.findViewById(R.id.atLocation);
             image1 = itemView.findViewById(R.id.postImage1);
             image2 = itemView.findViewById(R.id.postImage2);
             image3 = itemView.findViewById(R.id.postImage3);
@@ -582,6 +584,13 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     callback.onStartShare(item);
                 }
             });
+
+            if (item.getLocation() != null && !item.getLocation().isEmpty()){
+                atLocation.setText(item.getLocation());
+                atLocation.setVisibility(View.VISIBLE);
+            } else {
+                atLocation.setVisibility(View.GONE);
+            }
 
             if (item.getPostAttachment() != null && item.getPostAttachment().getImages() != null && item.getPostAttachment().getImages().length > 0) {
                 if (item.getPostAttachment().getImages().length == 1) {

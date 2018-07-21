@@ -47,6 +47,7 @@ public class NewsFeedItem implements Serializable {
     private int sharerId;
     private String shareTimestamp;
     private int privacyId;
+    private String location;
 
     public String getCoverUrl() {
         return coverUrl;
@@ -318,6 +319,14 @@ public class NewsFeedItem implements Serializable {
 
     public void setProductSoldAmount(int productSoldAmount) {
         this.productSoldAmount = productSoldAmount;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
 

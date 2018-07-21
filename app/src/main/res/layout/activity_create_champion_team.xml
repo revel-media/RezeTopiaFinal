@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.krito.com.rezetopia.activities.CreateChampionTeam"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/createTeams"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:background="@drawable/round_green_btn"
+        android:text="@string/create"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dimen_40"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/teamsRecView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

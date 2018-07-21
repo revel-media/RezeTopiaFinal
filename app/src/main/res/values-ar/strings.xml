@@ -19,7 +19,7 @@
     <string name="image">صورة</string>
     <string name="image_video">صورة/فيديو</string>
     <string name="rezetopia">ريزيتوبيا</string>
-    <string name="number_of_matches">عدد المبارايات</string>
+    <string name="number_of_teams">عدد الاندية</string>
     <string name="number_of_players">عدد الاعبين</string>
     <string name="empty_date">منشور فارغ</string>
     <string name="video">فيديو</string>
@@ -41,6 +41,8 @@
     <string name="ef_ok">ارسال</string>
     <string name="terms">اوافق على شروط التسجيل</string>
     <string name="name">الاسم</string>
+    <string name="player_name">اسم الاعب</string>
+    <string name="six">0</string>
     <string name="date_of_birth">تاريخ الميلاد</string>
     <string name="phone">رقم الهاتف</string>
     <string name="email">البريد الاكترونى</string>
@@ -204,9 +206,14 @@
     <string name="no_image">لا توجد صورة</string>
     <string name="vendors">البائعين</string>
     <string name="teams">الفرق</string>
+    <string name="team">الفريق</string>
     <string name="discussion">متاقشة</string>
     <string name="occur_date">يحدث في: </string>
     <string name="create">انشاء</string>
+    <string name="createGroupLabel">انشاء مجموعة</string>
+    <string name="champion_label">البطولات</string>
+    <string name="today_matches">مباريات اليوم</string>
+    <string name="create_champion">انشاء بطولة</string>
     <string name="create_event">عمل حدث</string>
     <string name="my_event">احداثي</string>
     <string name="to">الي</string>

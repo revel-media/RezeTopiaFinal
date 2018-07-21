@@ -3,6 +3,7 @@ package io.krito.com.rezetopia.helper;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
@@ -17,9 +18,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -260,6 +263,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ImageView image5;
         ProgressBar progressImage1;
         ProgressBar progressImage2;
+        TextView atLocation;
+        VideoView video;
 
         public PostViewHolder(final View itemView) {
             super(itemView);
@@ -278,6 +283,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             postLikeCommentOwnerNameView = itemView.findViewById(R.id.postLikeCommentOwnerNameView);
             shareTextPartOneView = itemView.findViewById(R.id.shareTextPartOneView);
             shareTextPartTwoView = itemView.findViewById(R.id.shareTextPartTwoView);
+            video = itemView.findViewById(R.id.videoView);
+            atLocation = itemView.findViewById(R.id.atLocation);
             verifyView = itemView.findViewById(R.id.verifyView);
             image1 = itemView.findViewById(R.id.postImage1);
             image2 = itemView.findViewById(R.id.postImage2);
@@ -314,10 +321,44 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
+
+            if (item.getLocation() != null && !item.getLocation().isEmpty()){
+                atLocation.setText(item.getLocation());
+                atLocation.setVisibility(View.VISIBLE);
+            } else {
+                atLocation.setVisibility(View.GONE);
+            }
+
             if (item.getItemImage() != null) {
                 Picasso.with(context).load(item.getItemImage()).into(ppView);
             } else {
                 ppView.setImageDrawable(context.getResources().getDrawable(R.drawable.default_avatar));
+            }
+
+
+            if (item.getPostAttachment() != null){
+                if (item.getPostAttachment().getVideos() != null && item.getPostAttachment().getVideos().length > 0){
+                    Uri vidUri = Uri.parse(item.getPostAttachment().getVideos()[0].getPath());
+                    if (video != null) {
+                        video.setVisibility(View.VISIBLE);
+                        video.setVideoURI(vidUri);
+                        MediaController vidControl = new MediaController(context);
+                        vidControl.setAnchorView(video);
+                        video.setMediaController(vidControl);
+                    }
+                } else {
+                    if (video != null) {
+                        video.setVisibility(View.GONE);
+                    }
+                }
+            }
+            if (video != null) {
+                video.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        video.start();
+                    }
+                });
             }
 
             if (item.getPostAttachment() != null && item.getPostAttachment().getImages() != null && item.getPostAttachment().getImages().length > 0) {

@@ -495,6 +495,7 @@ public class ProfileOperations {
                                         item.setPostId(post.getPostId());
                                         item.setCreatedAt(post.getCreatedAt());
                                         item.setCommentSize(post.getCommentSize());
+                                        item.setLocation(post.getLocation());
                                         item.setItemImage(post.getImageUrl());
                                         item.setLikes(post.getLikes());
                                         item.setOwnerId(post.getUserId());

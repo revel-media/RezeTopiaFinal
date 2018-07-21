@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/playersParentView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/teamNumber"
+        android:text="teamName"
+        android:textSize="20sp"
+        android:textColor="@color/green7"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_margin="@dimen/dimen_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/teamImage"
+            android:background="@drawable/rezetopia"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+
+        <EditText
+            android:layout_gravity="center_vertical"
+            android:id="@+id/teamNameView"
+            android:layout_marginStart="@dimen/dimen_20"
+            android:layout_marginEnd="@dimen/dimen_20"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/edit_border"
+            android:hint="@string/name"
+            android:paddingStart="@dimen/dimen_20"
+            android:paddingEnd="20dp"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+</LinearLayout>
