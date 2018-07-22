@@ -158,6 +158,8 @@ public class HomeOperations {
                         if (newsFeed.getItems().size() > 0){
                             feedCallback.onSuccess(newsFeed);
                         }
+                    } else if (response.isError() && response.getNextCursor().contentEquals("0")) {
+                        feedCallback.onEmptyResult();
                     } else {
                         feedCallback.onError(R.string.unknown_error);
                     }
@@ -348,6 +350,7 @@ public class HomeOperations {
     public interface NewsFeedCallback{
         void onSuccess(NewsFeed newsFeed);
         void onError(int error);
+        void onEmptyResult();
     }
 
     public interface LikeCallback {

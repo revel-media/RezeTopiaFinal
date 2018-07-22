@@ -267,7 +267,7 @@ public class ProfileOperations {
         protected Void doInBackground(final String... strings) {
             String url = baseUrl + "addfriend.php";
 
-            StringRequest post = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            StringRequest post = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/friends", new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -516,7 +516,7 @@ public class ProfileOperations {
                                     profileCursor = String.valueOf(Integer.parseInt(profileCursor) + 1);
                                     Log.i("response_cursor", "onResponse: " + profileCursor);
                                 }
-                            } else if (response.isError() && response.getMessage() != null && response.getMessage().contentEquals("there are no posts")) {
+                            } else if (response.isError() && response.getNextCursor().contentEquals("0")) {
                                 feedCallback.onEmptyResult();
                             } else {
                                 feedCallback.onError(R.string.unknown_error);

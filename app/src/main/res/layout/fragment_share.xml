@@ -5,9 +5,11 @@
     android:background="@drawable/post_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
+        android:id="@+id/shareRootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -25,7 +27,7 @@
 
             <FrameLayout
                 android:id="@+id/shareHeader"
-                android:background="@color/colorAccent"
+                android:background="@drawable/post_dark_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -47,29 +49,49 @@
                     android:layout_height="@dimen/dimen_20" />
             </FrameLayout>
 
-            <EditText
-                android:paddingRight="@dimen/dimen_10"
-                android:paddingEnd="@dimen/dimen_10"
-                android:paddingLeft="@dimen/dimen_10"
-                android:paddingStart="@dimen/dimen_10"
-                android:paddingTop="@dimen/dimen_10"
-                android:paddingBottom="@dimen/dimen_10"
-                android:hint="@string/tell_something"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="@dimen/dimen_10"
-                android:id="@+id/shareText"
-                android:background="@color/white"
+            <FrameLayout
+                android:layout_marginTop="@dimen/dimen_10"
                 android:layout_below="@id/shareHeader"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:id="@+id/textHeader">
+
+
+                <com.apradanas.prismoji.PrismojiEditText
+                    android:textAlignment="viewStart"
+                    android:paddingRight="@dimen/dimen_10"
+                    android:paddingEnd="@dimen/dimen_10"
+                    android:paddingLeft="@dimen/dimen_10"
+                    android:paddingStart="@dimen/dimen_10"
+                    android:paddingTop="@dimen/dimen_10"
+                    android:paddingBottom="@dimen/dimen_10"
+                    android:hint="@string/tell_something"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="@dimen/dimen_10"
+                    android:id="@+id/shareText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/post_text_background"
+                    app:emojiSize="26sp" />
+
+                <ImageView
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="end|center"
+                    android:id="@+id/emoView"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_emo_green"
+                    android:layout_marginEnd="@dimen/dimen_20"
+                    android:layout_marginBottom="@dimen/dimen_10"/>
+            </FrameLayout>
+
 
             <android.support.v7.widget.RecyclerView
                 android:visibility="gone"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_below="@id/shareText"
+                android:layout_below="@id/textHeader"
                 android:id="@+id/imagesRecView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

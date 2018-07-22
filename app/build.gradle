@@ -153,6 +153,10 @@ dependencies {
     //spinner
     implementation 'com.jaredrummler:material-spinner:1.2.5'
 
+    //video player
+    implementation 'uk.co.jakelee:vidsta:1.0.0'
+    implementation 'com.github.rtoshiro.fullscreenvideoview:fullscreenvideoview:1.1.2'
+
     //places
     implementation 'com.taskail:simple-places-search-dialog:1.0'
     implementation 'com.google.android.gms:play-services-places:15.0.1'

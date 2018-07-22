@@ -117,6 +117,8 @@
     <string name="spinner_foot">اختار القدم المفضلة</string>
     <string name="countries_array">اختار الجنسية</string>
     <string name="checkingNetwork">هناك خطا في الاتصال بالانترنت</string>
+    <string name="post_save_success">تم حفظ المنشور</string>
+    <string name="post_save_failure">خطأ فى حفظ المنشور</string>
 
     <string name="tell_something">&#8230;اخبرنا بشئ</string>
     <string name="load_more">&#8230;المزيد</string>

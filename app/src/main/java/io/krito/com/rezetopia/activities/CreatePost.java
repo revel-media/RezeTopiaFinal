@@ -77,6 +77,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -624,7 +625,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
     }
 
     private void createPostMultiPart() {
-        VolleyMultipartRequest request = new VolleyMultipartRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/store",
+        VolleyMultipartRequest request = new VolleyMultipartRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts",
                 new Response.Listener<NetworkResponse>() {
                     @Override
                     public void onResponse(NetworkResponse response) {
@@ -716,6 +717,8 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
                 //params.put("description", postText.getText().toString());
                 try {
                     params.put("description", URLEncoder.encode(postText.getText().toString(), "UTF-8"));
+                    Log.i("postDescriptionEncode", "getParams: " + URLEncoder.encode(postText.getText().toString(), "UTF-8"));
+                    Log.i("postDescriptionEncode", "getParams: " + URLDecoder.decode(postText.getText().toString(), "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -727,6 +730,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
                         e.printStackTrace();
                     }
                 }
+
                 if (selectedImages != null && selectedImages.size() > 0){
                     params.put("imageSize", String.valueOf(selectedImages.size()));
 
@@ -739,7 +743,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
                 Log.i("uploadTest", "getParams: bytes");
                 Map<String, DataPart> params = new HashMap<>();
                 if (selectedVideo != null){
-                    params.put("video", new DataPart("video.mp4", convert(selectedVideo), "image/mp4"));
+                    params.put("video", new DataPart("video.mp4", convert(selectedVideo), "video/mp4"));
                 }
 
                 if (selectedImages != null){

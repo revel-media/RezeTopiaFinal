@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.andrognito.flashbar.Flashbar;
+import com.andrognito.flashbar.anim.FlashAnimBarBuilder;
 import com.android.volley.toolbox.StringRequest;
 import com.isupatches.wisefy.WiseFy;
 import com.keiferstone.nonet.Monitor;
@@ -46,7 +48,7 @@ import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeedItem;
 import io.krito.com.rezetopia.models.pojo.post.PostResponse;
 import io.krito.com.rezetopia.receivers.ConnectivityReceiver;
 
-public class Home extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
+public class Home extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener , Share.ShareCallback{
 
     private static final int COMMENT_ACTIVITY_RESULT = 1001;
     private static final int CREATE_POST_RESULT = 1002;
@@ -88,7 +90,7 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
 
         //Log.i("USER_ID", "onCreateView: " + userId);
 
-        if (savedInstanceState != null && savedInstanceState.getSerializable("feed") != null){
+        if (savedInstanceState != null && savedInstanceState.getSerializable("feed") != null) {
 
             newsFeed = (NewsFeed) savedInstanceState.getSerializable("feed");
             recyclerView.post(new Runnable() {
@@ -145,7 +147,7 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
         return view;
     }
 
-    private void registerScrollListener(){
+    private void registerScrollListener() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -198,7 +200,7 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
 
     @Override
     public void onPause() {
-       // merlinConn.unbind();
+        // merlinConn.unbind();
         super.onPause();
     }
 
@@ -248,7 +250,7 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
                 }
                 loadingData = false;
 
-                if (homeSwipeView.isRefreshing()){
+                if (homeSwipeView.isRefreshing()) {
                     homeSwipeView.setRefreshing(false);
                 }
             }
@@ -259,8 +261,15 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
                 //Log.i("news_feed_error", "onError: " + errorString);
                 //Snackbar.make(homeHeader, error, BaseTransientBottomBar.LENGTH_LONG).show();
                 loadingData = false;
-                if (homeSwipeView.isRefreshing()){
+                if (homeSwipeView.isRefreshing()) {
                     homeSwipeView.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onEmptyResult() {
+                if (adapter != null) {
+                    adapter.removeLastItem();
                 }
             }
         });
@@ -312,14 +321,26 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
                 @Override
                 public void onStartEditPost(NewsFeedItem item, int index) {
                     Intent intent = new Intent(getActivity(), EditPost.class);
-                    intent.putExtra("item" , item);
-                    intent.putExtra("index" , index);
+                    intent.putExtra("item", item);
+                    intent.putExtra("index", index);
                     startActivityForResult(intent, EDIT_POST_RESULT);
                 }
 
                 @Override
                 public void onSetItem(int index) {
                     adapter.notifyItemChanged(index);
+                }
+
+                @Override
+                public void onPostSaved(boolean error) {
+                    String saveMessage = error ? getResources().getString(R.string.post_save_failure):getResources().getString(R.string.post_save_success);
+                    Flashbar.Builder builder = new Flashbar.Builder(getActivity());
+                    builder.gravity(Flashbar.Gravity.BOTTOM)
+                            .backgroundColor(R.color.red2)
+                            .enableSwipeToDismiss()
+                            .message(saveMessage)
+                            .enterAnimation(new FlashAnimBarBuilder(getActivity()).slideFromRight().duration(200))
+                            .build().show();
                 }
 
                 @Override
@@ -332,6 +353,11 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
         } else if (s > 0 && e > 0) {
             adapter.notifyItemRangeInserted(s, e);
         }
+    }
+
+    @Override
+    public void onPostShared(NewsFeedItem item) {
+        //adapter.addPostToTop(item);
     }
 
     public interface HomeCallback {
@@ -378,7 +404,7 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
                     //adapter.addPostItem(item);
                 }
             }
-        } else if (requestCode == EDIT_POST_RESULT){
+        } else if (requestCode == EDIT_POST_RESULT) {
             NewsFeedItem item = (NewsFeedItem) data.getExtras().getSerializable("item");
             int index = data.getExtras().getInt("index");
             adapter.setItem(item, index);
@@ -388,7 +414,7 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("feed" ,newsFeed);
+        outState.putSerializable("feed", newsFeed);
         outState.putInt("last", pastVisibleItems);
     }
 }

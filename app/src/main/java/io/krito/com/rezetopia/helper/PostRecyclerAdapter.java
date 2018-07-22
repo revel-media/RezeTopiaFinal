@@ -24,12 +24,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.andrognito.flashbar.Flashbar;
+import com.andrognito.flashbar.anim.FlashAnimBarBuilder;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.apradanas.prismoji.PrismojiTextView;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -50,10 +53,13 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import io.krito.com.rezetopia.R;
+import io.krito.com.rezetopia.activities.AboutProfile;
 import io.krito.com.rezetopia.activities.Profile;
 import io.krito.com.rezetopia.models.operations.HomeOperations;
 import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeedItem;
 import ru.whalemare.sheetmenu.SheetMenu;
+import uk.co.jakelee.vidsta.VidstaPlayer;
+import uk.co.jakelee.vidsta.listeners.VideoStateListeners;
 
 public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -91,15 +97,18 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         //notifyItemInserted(items.size() - 1);
         callback.onItemAdded(items.size());
     }
+
     public int removeLastItem() {
         //items.remove(items.size() - 1);
         //notifyItemRemoved(items.size() - 1);
 
-        for (NewsFeedItem item : items) {
-            if (item.getType() == 1009) {
-                items.remove(items.size() - 1);
-                callback.onItemRemoved(items.size());
-                return items.size();
+        if (items != null && items.size() > 0) {
+            for (NewsFeedItem item : items) {
+                if (item.getType() == 1009) {
+                    items.remove(items.size() - 1);
+                    callback.onItemRemoved(items.size());
+                    return items.size();
+                }
             }
         }
         //callback.onItemRemoved(items.size());
@@ -241,7 +250,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private class PostViewHolder extends RecyclerView.ViewHolder {
 
-        TextView postTextView;
+        PrismojiTextView postTextView;
         Button likeButton;
         Button commentButton;
         TextView dateView;
@@ -264,7 +273,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ProgressBar progressImage1;
         ProgressBar progressImage2;
         TextView atLocation;
-        VideoView video;
+        VidstaPlayer video;
+        TextView at;
 
         public PostViewHolder(final View itemView) {
             super(itemView);
@@ -293,6 +303,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             image5 = itemView.findViewById(R.id.postImage5);
             progressImage1 = itemView.findViewById(R.id.progressImage1);
             progressImage2 = itemView.findViewById(R.id.progressImage2);
+            at = itemView.findViewById(R.id.at);
         }
 
         public void bind(final NewsFeedItem item, final int pos) {
@@ -325,8 +336,10 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (item.getLocation() != null && !item.getLocation().isEmpty()){
                 atLocation.setText(item.getLocation());
                 atLocation.setVisibility(View.VISIBLE);
+                at.setVisibility(View.VISIBLE);
             } else {
                 atLocation.setVisibility(View.GONE);
+                at.setVisibility(View.GONE);
             }
 
             if (item.getItemImage() != null) {
@@ -338,13 +351,37 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (item.getPostAttachment() != null){
                 if (item.getPostAttachment().getVideos() != null && item.getPostAttachment().getVideos().length > 0){
-                    Uri vidUri = Uri.parse(item.getPostAttachment().getVideos()[0].getPath());
                     if (video != null) {
                         video.setVisibility(View.VISIBLE);
-                        video.setVideoURI(vidUri);
-                        MediaController vidControl = new MediaController(context);
-                        vidControl.setAnchorView(video);
-                        video.setMediaController(vidControl);
+                        video.setVideoSource(item.getPostAttachment().getVideos()[0].getPath());
+
+                        video.setOnVideoBufferingListener(new VideoStateListeners.OnVideoBufferingListener() {
+                            @Override
+                            public void OnVideoBuffering(VidstaPlayer evp, int buffPercent) {
+                                Log.i("VidaaaVideo", "OnVideoBuffering: " + buffPercent);
+                            }
+                        });
+
+                        video.setOnVideoErrorListener(new VideoStateListeners.OnVideoErrorListener() {
+                            @Override
+                            public void OnVideoError(int what, int extra) {
+                                Log.i("VidaaaVideo", "OnVideoError: " + "extra: "  + extra);
+                            }
+                        });
+
+                        video.setOnVideoStartedListener(new VideoStateListeners.OnVideoStartedListener() {
+                            @Override
+                            public void OnVideoStarted(VidstaPlayer evp) {
+                                Log.i("VidaaaVideo", "OnVideoStarted: ");
+                            }
+                        });
+
+                        video.setOnVideoFinishedListener(new VideoStateListeners.OnVideoFinishedListener() {
+                            @Override
+                            public void OnVideoFinished(VidstaPlayer evp) {
+                                Log.i("VidaaaVideo", "OnVideoFinished: ");
+                            }
+                        });
                     }
                 } else {
                     if (video != null) {
@@ -352,14 +389,32 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
             }
-            if (video != null) {
-                video.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        video.start();
-                    }
-                });
-            }
+
+
+//            if (item.getPostAttachment() != null){
+//                if (item.getPostAttachment().getVideos() != null && item.getPostAttachment().getVideos().length > 0){
+//                    Uri vidUri = Uri.parse(item.getPostAttachment().getVideos()[0].getPath());
+//                    if (video != null) {
+//                        video.setVisibility(View.VISIBLE);
+//                        video.setVideoURI(vidUri);
+//                        MediaController vidControl = new MediaController(context);
+//                        vidControl.setAnchorView(video);
+//                        video.setMediaController(vidControl);
+//                    }
+//                } else {
+//                    if (video != null) {
+//                        video.setVisibility(View.GONE);
+//                    }
+//                }
+//            }
+//            if (video != null) {
+//                video.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        video.start();
+//                    }
+//                });
+//            }
 
             if (item.getPostAttachment() != null && item.getPostAttachment().getImages() != null && item.getPostAttachment().getImages().length > 0) {
                 if (item.getPostAttachment().getImages().length == 1) {
@@ -488,6 +543,12 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (!(item.getPostText() == null || item.getPostText().contentEquals("null"))){
                 postTextView.setText(item.getPostText());
+//                try {
+//                    postTextView.setText(URLDecoder.decode(item.getPostText(), "UTF-8"));
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+                Log.i("PostText", "bind: " + item.getPostText());
             } else {
                 postTextView.setText("");
             }
@@ -991,7 +1052,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void removePost(final int postId) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://rezetopia.dev-krito.com/app/reze/user_post.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/delete/post",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1028,11 +1089,22 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void savePost(final int postId) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://rezetopia.dev-krito.com/app/reze/user_post.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/save/post/save",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.i("save_post", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (!jsonObject.getBoolean("error")){
+                               callback.onPostSaved(false);
+                            } else {
+                                callback.onPostSaved(true);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -1127,5 +1199,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         void onStartEditPost(NewsFeedItem item, int index);
 
         void onSetItem(int index);
+
+        void onPostSaved(boolean error);
     }
 }

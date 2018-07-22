@@ -347,6 +347,18 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         }
 
                         @Override
+                        public void onPostSaved(boolean error) {
+                            String saveMessage = error ? getResources().getString(R.string.post_save_failure):getResources().getString(R.string.post_save_success);
+                            Flashbar.Builder builder = new Flashbar.Builder(Profile.this);
+                            builder.gravity(Flashbar.Gravity.BOTTOM)
+                                    .backgroundColor(R.color.red2)
+                                    .enableSwipeToDismiss()
+                                    .message(saveMessage)
+                                    .enterAnimation(new FlashAnimBarBuilder(Profile.this).slideFromRight().duration(200))
+                                    .build().show();
+                        }
+
+                        @Override
                         public void onStartCreatePost() {
                             Intent intent = new Intent(Profile.this, CreatePost.class);
                             startActivityForResult(intent, CREATE_POST_RESULT);
@@ -425,6 +437,18 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                 public void onStartShare(NewsFeedItem item) {
                     Share share = Share.createShareFragment(item);
                     share.show(getFragmentManager(), null);
+                }
+
+                @Override
+                public void onPostSaved(boolean error) {
+                    String saveMessage = error ? getResources().getString(R.string.post_save_failure):getResources().getString(R.string.post_save_success);
+                    Flashbar.Builder builder = new Flashbar.Builder(Profile.this);
+                    builder.gravity(Flashbar.Gravity.BOTTOM)
+                            .backgroundColor(R.color.red2)
+                            .enableSwipeToDismiss()
+                            .message(saveMessage)
+                            .enterAnimation(new FlashAnimBarBuilder(Profile.this).slideFromRight().duration(200))
+                            .build().show();
                 }
 
                 @Override

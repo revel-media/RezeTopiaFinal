@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +22,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.apradanas.prismoji.PrismojiEditText;
+import com.apradanas.prismoji.PrismojiPopup;
+import com.apradanas.prismoji.listeners.OnSoftKeyboardCloseListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,9 +47,11 @@ public class Share extends DialogFragment implements View.OnClickListener{
     NewsFeedItem item;
     ArrayList<String> imagesList;
     String userId;
+    PrismojiPopup prismojiPopup;
+    ShareCallback callback;
 
     ImageView close;
-    EditText textShare;
+    PrismojiEditText textShare;
     RecyclerView images;
     TextView username;
     TextView date;
@@ -53,6 +59,8 @@ public class Share extends DialogFragment implements View.OnClickListener{
     TextView ownerText;
     CustomTextView share;
     CustomTextView cancel;
+    FrameLayout shareRootView;
+    ImageView emoView;
 
     public static Share createShareFragment(NewsFeedItem i){
         Bundle bundle = new Bundle();
@@ -60,6 +68,20 @@ public class Share extends DialogFragment implements View.OnClickListener{
         Share share = new Share();
         share.setArguments(bundle);
         return share;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callback = (ShareCallback) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (callback != null){
+            callback = null;
+        }
     }
 
     @Nullable
@@ -78,6 +100,8 @@ public class Share extends DialogFragment implements View.OnClickListener{
         ownerText = view.findViewById(R.id.ownerPostText);
         share = view.findViewById(R.id.share);
         cancel = view.findViewById(R.id.cancel);
+        shareRootView = view.findViewById(R.id.shareRootView);
+        emoView = view.findViewById(R.id.emoView);
 
         userId = getActivity().getSharedPreferences(AppConfig.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
                 .getString(AppConfig.LOGGED_IN_USER_ID_SHARED, null);
@@ -100,12 +124,25 @@ public class Share extends DialogFragment implements View.OnClickListener{
 
         share.setOnClickListener(this);
         cancel.setOnClickListener(this);
+        close.setOnClickListener(this);
+        emoView.setOnClickListener(this);
+
+        prismojiPopup = PrismojiPopup.Builder
+                .fromRootView(shareRootView)
+                .into(textShare)
+                .setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+                    @Override
+                    public void onKeyboardClose() {
+                        prismojiPopup.dismiss();
+                    }
+                })
+                .build();
         return view;
     }
 
 
     private void sharePost(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://rezetopia.dev-krito.com/app/reze/user_post.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/share",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -113,7 +150,11 @@ public class Share extends DialogFragment implements View.OnClickListener{
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (!jsonObject.getBoolean("error")){
+                                //todo add data to item
+                                //callback.onPostShared(new NewsFeedItem());
                                 dismiss();
+                            } else {
+                                share.setEnabled(true);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -137,9 +178,9 @@ public class Share extends DialogFragment implements View.OnClickListener{
                 }
                 map.put("method", "share_post");
                 map.put("user_id", userId);
-                map.put("text", sText);
+                map.put("description", sText);
                 map.put("friend_id", "0");
-                map.put("post_id", item.getPostId());
+                map.put("shared_post_id", item.getPostId());
 
 
                 return map;
@@ -156,8 +197,23 @@ public class Share extends DialogFragment implements View.OnClickListener{
                 dismiss();
                 break;
             case R.id.share:
+                share.setEnabled(false);
                 sharePost();
                 break;
+            case R.id.closeShare:
+                dismiss();
+                break;
+            case R.id.emoView:
+                if (prismojiPopup.isShowing()){
+                    prismojiPopup.dismiss();
+                } else {
+                    prismojiPopup.toggle();
+                }
+                break;
         }
+    }
+
+    public interface ShareCallback{
+        void onPostShared(NewsFeedItem item);
     }
 }

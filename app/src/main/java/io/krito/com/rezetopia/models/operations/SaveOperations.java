@@ -56,7 +56,8 @@ public class SaveOperations  {
         protected Void doInBackground(final String... strings) {
             String url = baseUrl + "reze/user_post.php";
 
-            VolleyCustomRequest request = new VolleyCustomRequest(Request.Method.POST, url, ApiResponse.class,
+            VolleyCustomRequest request = new VolleyCustomRequest(Request.Method.GET, "https://rezetopia.com/Apis/posts/save/post?user_id=" + strings[0] + "&cursor=" + cursor,
+                    ApiResponse.class,
                     new Response.Listener<ApiResponse>() {
                         @Override
                         public void onResponse(ApiResponse response) {
@@ -71,6 +72,7 @@ public class SaveOperations  {
                                         item.setPostId(post.getPostId());
                                         item.setCreatedAt(post.getCreatedAt());
                                         item.setCommentSize(post.getCommentSize());
+                                        item.setLocation(post.getLocation());
                                         item.setItemImage(post.getImageUrl());
                                         item.setLikes(post.getLikes());
                                         item.setOwnerId(post.getUserId());
@@ -85,9 +87,9 @@ public class SaveOperations  {
                                     newsFeed.setNextCursor(response.getNextCursor());
                                     newsFeed.setNow(response.getNow());
                                     saveCallback.onSuccess(newsFeed);
-                                    cursor = String.valueOf(Integer.parseInt(cursor) + 11);
+                                    cursor = String.valueOf(Integer.parseInt(cursor) + 1);
                                 }
-                            } else if (response.isError() && response.getMessage().contentEquals("there are no posts")) {
+                            } else if (response.isError() && response.getNextCursor().contentEquals("0")) {
                                 saveCallback.onEmptyResult();
                             } else {
                                 Log.i("response_", "onResponse: " + response.isError());
@@ -119,16 +121,18 @@ public class SaveOperations  {
                     }
                     saveCallback.onError(R.string.connection_error);
                 }
-            }) {
+            });
+
+            /*{
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("method", "get_saved");
-                    map.put("user_id", strings[0]);
-                    map.put("cursor", cursor);
-                    return map;
-                }
-            };
+                Map<String, String> map = new HashMap<>();
+                map.put("method", "get_saved");
+                map.put("user_id", strings[0]);
+                map.put("cursor", cursor);
+                return map;
+            }
+            }*/
 
             request.setRetryPolicy(new DefaultRetryPolicy(5000,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

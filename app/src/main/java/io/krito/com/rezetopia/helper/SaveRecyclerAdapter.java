@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.apradanas.prismoji.PrismojiTextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -232,7 +233,7 @@ public class SaveRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private class PostViewHolder extends RecyclerView.ViewHolder {
 
-        TextView postTextView;
+        PrismojiTextView postTextView;
         Button likeButton;
         Button commentButton;
         TextView dateView;
@@ -247,6 +248,8 @@ public class SaveRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView postLikeCommentOwnerNameView;
         TextView shareTextPartOneView;
         TextView shareTextPartTwoView;
+        TextView atLocation;
+        TextView at;
         ImageView image1;
         ImageView image2;
         ImageView image3;
@@ -273,6 +276,8 @@ public class SaveRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             shareTextPartOneView = itemView.findViewById(R.id.shareTextPartOneView);
             shareTextPartTwoView = itemView.findViewById(R.id.shareTextPartTwoView);
             verifyView = itemView.findViewById(R.id.verifyView);
+            atLocation = itemView.findViewById(R.id.atLocation);
+            at = itemView.findViewById(R.id.at);
             image1 = itemView.findViewById(R.id.postImage1);
             image2 = itemView.findViewById(R.id.postImage2);
             image3 = itemView.findViewById(R.id.postImage3);
@@ -302,6 +307,15 @@ public class SaveRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     callback.onStartShare(item);
                 }
             });
+
+            if (item.getLocation() != null && !item.getLocation().isEmpty()){
+                atLocation.setText(item.getLocation());
+                atLocation.setVisibility(View.VISIBLE);
+                at.setVisibility(View.VISIBLE);
+            } else {
+                atLocation.setVisibility(View.GONE);
+                at.setVisibility(View.GONE);
+            }
 
             if (item.getItemImage() != null) {
                 Picasso.with(context).load(item.getItemImage()).into(ppView);
@@ -1006,7 +1020,7 @@ public class SaveRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void unSavePost(final int postId, final int index){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://rezetopia.dev-krito.com/app/reze/user_post.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/save/post/save",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

@@ -81,6 +81,15 @@
                     android:textColor="@color/black"/>
 
                 <TextView
+                    android:visibility="gone"
+                    android:layout_marginStart="5dp"
+                    android:text="at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/at"/>
+
+                <TextView
+                    android:textColor="@color/black"
                     android:layout_marginStart="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -109,7 +118,7 @@
             android:src="@drawable/ic_more_horz"/>
     </LinearLayout>
 
-    <TextView
+    <com.apradanas.prismoji.PrismojiTextView
         android:id="@+id/postTextView"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"

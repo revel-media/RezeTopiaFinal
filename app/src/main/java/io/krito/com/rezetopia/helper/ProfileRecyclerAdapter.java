@@ -26,7 +26,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.apradanas.prismoji.PrismojiTextView;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -531,7 +535,7 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private class PostViewHolder extends RecyclerView.ViewHolder {
 
-        TextView postTextView;
+        PrismojiTextView postTextView;
         Button likeButton;
         Button commentButton;
         TextView dateView;
@@ -541,6 +545,7 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         Button postShareButton;
         ImageView verifyView;
         TextView atLocation;
+        TextView at;
         ImageView image1;
         ImageView image2;
         ImageView image3;
@@ -560,6 +565,7 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             postShareButton = itemView.findViewById(R.id.postShareButton);
             verifyView = itemView.findViewById(R.id.verifyView);
             atLocation = itemView.findViewById(R.id.atLocation);
+            at = itemView.findViewById(R.id.at);
             image1 = itemView.findViewById(R.id.postImage1);
             image2 = itemView.findViewById(R.id.postImage2);
             image3 = itemView.findViewById(R.id.postImage3);
@@ -588,8 +594,10 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             if (item.getLocation() != null && !item.getLocation().isEmpty()){
                 atLocation.setText(item.getLocation());
                 atLocation.setVisibility(View.VISIBLE);
+                at.setVisibility(View.VISIBLE);
             } else {
                 atLocation.setVisibility(View.GONE);
+                at.setVisibility(View.GONE);
             }
 
             if (item.getPostAttachment() != null && item.getPostAttachment().getImages() != null && item.getPostAttachment().getImages().length > 0) {
@@ -1174,7 +1182,7 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private void removePost(final int postId) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://rezetopia.dev-krito.com/app/reze/user_post.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/delete/post",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1212,11 +1220,22 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private void savePost(final int postId) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://rezetopia.dev-krito.com/app/reze/user_post.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/save/post/save",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.i("save_post", response);
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (!jsonObject.getBoolean("error")){
+                                callback.onPostSaved(false);
+                            } else {
+                                callback.onPostSaved(true);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -1285,5 +1304,7 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onStartEditPost(NewsFeedItem item, int index);
 
         void onStartShare(NewsFeedItem item);
+
+        void onPostSaved(boolean error);
     }
 }
