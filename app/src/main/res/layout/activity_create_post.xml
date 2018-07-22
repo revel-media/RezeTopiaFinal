@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
+        android:id="@+id/createPostRoot"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -121,33 +122,61 @@
 
             </RelativeLayout>
 
-            <EditText
-                android:textAlignment="viewStart"
+            <FrameLayout
                 android:layout_below="@id/createCancelPostHeader"
-                android:paddingRight="@dimen/dimen_10"
-                android:paddingEnd="@dimen/dimen_10"
-                android:paddingLeft="@dimen/dimen_10"
-                android:paddingStart="@dimen/dimen_10"
-                android:paddingTop="@dimen/dimen_10"
-                android:paddingBottom="@dimen/dimen_10"
-                android:hint="@string/tell_something"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="@dimen/dimen_10"
-                android:id="@+id/postText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/post_text_background"/>
+                android:layout_height="match_parent"
+                android:id="@+id/textHeader">
 
-            <ImageView
-                android:id="@+id/emoView"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@id/postText"
-                android:src="@drawable/ic_emo_green"
-                android:layout_marginEnd="@dimen/dimen_20"
-                android:layout_marginBottom="@dimen/dimen_10"/>
+
+                <com.apradanas.prismoji.PrismojiEditText
+                    android:textAlignment="viewStart"
+                    android:paddingRight="@dimen/dimen_10"
+                    android:paddingEnd="@dimen/dimen_10"
+                    android:paddingLeft="@dimen/dimen_10"
+                    android:paddingStart="@dimen/dimen_10"
+                    android:paddingTop="@dimen/dimen_10"
+                    android:paddingBottom="@dimen/dimen_10"
+                    android:hint="@string/tell_something"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="@dimen/dimen_10"
+                    android:id="@+id/postText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/post_text_background"
+                    app:emojiSize="26sp" />
+
+                <ImageView
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="end|center"
+                    android:id="@+id/emoView"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_emo_green"
+                    android:layout_marginEnd="@dimen/dimen_20"
+                    android:layout_marginBottom="@dimen/dimen_10"/>
+            </FrameLayout>
+
+
+
+            <!--<EditText-->
+                <!--android:textAlignment="viewStart"-->
+                <!--android:layout_below="@id/createCancelPostHeader"-->
+                <!--android:paddingRight="@dimen/dimen_10"-->
+                <!--android:paddingEnd="@dimen/dimen_10"-->
+                <!--android:paddingLeft="@dimen/dimen_10"-->
+                <!--android:paddingStart="@dimen/dimen_10"-->
+                <!--android:paddingTop="@dimen/dimen_10"-->
+                <!--android:paddingBottom="@dimen/dimen_10"-->
+                <!--android:hint="@string/tell_something"-->
+                <!--android:layout_marginStart="10dp"-->
+                <!--android:layout_marginEnd="10dp"-->
+                <!--android:layout_marginBottom="@dimen/dimen_10"-->
+                <!--android:id="@+id/postText"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@drawable/post_text_background"/>-->
 
 
             <ImageView
@@ -155,7 +184,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorGrayDark"
-                android:layout_below="@id/emoView"/>
+                android:layout_below="@id/textHeader"/>
 
             <TextView
                 android:layout_marginTop="3dp"

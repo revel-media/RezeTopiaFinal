@@ -52,6 +52,9 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.apradanas.prismoji.PrismojiEditText;
+import com.apradanas.prismoji.PrismojiPopup;
+import com.apradanas.prismoji.listeners.OnSoftKeyboardCloseListener;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
 import com.tangxiaolv.telegramgallery.GalleryConfig;
@@ -109,7 +112,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
     TextView privacyText;
     ImageView privacyIcon;
     ImageView back;
-    EditText postText;
+    PrismojiEditText postText;
     TextView image;
     //CustomTextView video;
     TextView location;
@@ -121,6 +124,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
     Button postButton;
     TextView actualLocationView;
     FrameLayout deleteLocationView;
+    FrameLayout createPostRoot;
 
 
     private String decodedVideo;
@@ -133,6 +137,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
     private int postType;
     private String privacy = "public";
     private StringRequest stringRequest;
+    PrismojiPopup prismojiPopup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +165,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
         postButton = findViewById(R.id.postButton);
         actualLocationView = findViewById(R.id.actualLocationView);
         deleteLocationView = findViewById(R.id.deleteLocationView);
+        createPostRoot = findViewById(R.id.createPostRoot);
 
 
 
@@ -172,6 +178,18 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
         postButton.setOnClickListener(this);
         location.setOnClickListener(this);
         deleteLocationView.setOnClickListener(this);
+        postText.setOnClickListener(this);
+
+        prismojiPopup = PrismojiPopup.Builder
+                .fromRootView(createPostRoot)
+                .into(postText)
+                .setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+                    @Override
+                    public void onKeyboardClose() {
+                        prismojiPopup.dismiss();
+                    }
+                })
+                .build();
     }
 
     private void showPostPopupWindow(View anchor) {
@@ -334,6 +352,11 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
             case R.id.tagFriend:
                 break;
             case R.id.emoView:
+                if (prismojiPopup.isShowing()){
+                    prismojiPopup.dismiss();
+                } else {
+                    prismojiPopup.toggle();
+                }
                 break;
             case R.id.postButton:
                 if (ConnectivityReceiver.isConnected(CreatePost.this)) {
