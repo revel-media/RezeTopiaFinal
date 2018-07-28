@@ -117,6 +117,9 @@
     <string name="spinner_foot">اختار القدم المفضلة</string>
     <string name="countries_array">اختار الجنسية</string>
     <string name="checkingNetwork">هناك خطا في الاتصال بالانترنت</string>
+    <string name="empty_friends">ليس لديك اصدقاء الى الان</string>
+    <string name="done">تم</string>
+    <string name="others">اخرون</string>
     <string name="post_save_success">تم حفظ المنشور</string>
     <string name="post_save_failure">خطأ فى حفظ المنشور</string>
 
@@ -196,7 +199,7 @@
     <string name="member">عضو</string>
     <string name="home">الرئيسية</string>
     <string name="report">ابلاغ</string>
-    <string name="add_friend">اضافى صديق</string>
+    <string name="add_friend">اضافة صديق</string>
     <string name="secret">سري</string>
     <string name="closed">مغلق</string>
     <string name="public_">عام</string>

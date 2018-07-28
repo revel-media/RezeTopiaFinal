@@ -3,8 +3,8 @@ package io.krito.com.rezetopia.helper;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -18,14 +18,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
 
-import com.andrognito.flashbar.Flashbar;
-import com.andrognito.flashbar.anim.FlashAnimBarBuilder;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -40,22 +36,20 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import io.krito.com.rezetopia.R;
-import io.krito.com.rezetopia.activities.AboutProfile;
 import io.krito.com.rezetopia.activities.Profile;
 import io.krito.com.rezetopia.models.operations.HomeOperations;
+import io.krito.com.rezetopia.models.pojo.friends.Friend;
 import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeedItem;
 import ru.whalemare.sheetmenu.SheetMenu;
 import uk.co.jakelee.vidsta.VidstaPlayer;
@@ -71,6 +65,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int VIEW_POST_4 = 6;
     private static final int VIEW_POST_5 = 7;
     private static final int VIEW_PP = 8;
+    private static final int VIEW_SUGGESTED = 9;
 
     private Context context;
     private ArrayList<NewsFeedItem> items;
@@ -167,6 +162,9 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (viewType == VIEW_PP) {
             View view = LayoutInflater.from(context).inflate(R.layout.pp_card, parent, false);
             return new PpViewHolder(view);
+        } else if (viewType == VIEW_SUGGESTED) {
+            View view = LayoutInflater.from(context).inflate(R.layout.suggested, parent, false);
+            return new SuggestedFriendsHolder(view);
         } else {
             View view = LayoutInflater.from(context).inflate(R.layout.progress, parent, false);
             return new ProgressViewHolder(view);
@@ -181,6 +179,9 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (holder instanceof PpViewHolder) {
             PpViewHolder pHolder = (PpViewHolder) holder;
             pHolder.bind(items.get(position - 1), position - 1);
+        } else if (holder instanceof SuggestedFriendsHolder) {
+            SuggestedFriendsHolder pHolder = (SuggestedFriendsHolder) holder;
+            pHolder.bind(new ArrayList<>(Arrays.asList(items.get(position - 1).getFriends())), position);
         }
     }
 
@@ -197,6 +198,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return VIEW_PROGRESS;
         } else if (items.get(position - 1).getType() == NewsFeedItem.PP_TYPE) {
             return VIEW_PP;
+        } else if (items.get(position - 1).getType() == NewsFeedItem.SUGGESTED_FRIENDS_TYPE) {
+            return VIEW_SUGGESTED;
         } else if (items.get(position - 1).getPostAttachment() != null && items.get(position - 1).getPostAttachment().getImages() != null && items.get(position - 1).getPostAttachment().getImages().length > 0) {
             if (items.get(position - 1).getPostAttachment().getImages().length == 2) {
                 return VIEW_POST_2;
@@ -275,6 +278,11 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView atLocation;
         VidstaPlayer video;
         TextView at;
+        TextView isWith;
+        TextView and;
+        TextView with1;
+        TextView with2;
+
 
         public PostViewHolder(final View itemView) {
             super(itemView);
@@ -304,9 +312,40 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             progressImage1 = itemView.findViewById(R.id.progressImage1);
             progressImage2 = itemView.findViewById(R.id.progressImage2);
             at = itemView.findViewById(R.id.at);
+            isWith = itemView.findViewById(R.id.isWith);
+            and = itemView.findViewById(R.id.and);
+            with1 = itemView.findViewById(R.id.with1);
+            with2 = itemView.findViewById(R.id.with2);
         }
 
         public void bind(final NewsFeedItem item, final int pos) {
+
+            if (item.getTags() != null && item.getTags().length > 0){
+                isWith.setVisibility(View.VISIBLE);
+                and.setVisibility(View.VISIBLE);
+                with1.setVisibility(View.VISIBLE);
+                if (item.getTags().length > 1) {
+                    with2.setVisibility(View.VISIBLE);
+                    and.setVisibility(View.VISIBLE);
+                } else {
+                    with2.setVisibility(View.GONE);
+                    and.setVisibility(View.GONE);
+                }
+
+                with1.setText(item.getTags()[0].getName());
+
+                if (item.getTags().length == 2) {
+                    with2.setText(item.getTags()[1].getName());
+                } else if (item.getTags().length > 2){
+                    String others = context.getResources().getString(R.string.others);
+                    with2.setText(item.getTags().length - 1 + " " + others);
+                }
+            } else {
+                isWith.setVisibility(View.GONE);
+                and.setVisibility(View.GONE);
+                with1.setVisibility(View.GONE);
+                with2.setVisibility(View.GONE);
+            }
 
             if (item.getMessage() != null && !item.getMessage().isEmpty()) {
                 if (item.getMessage().contentEquals("like_friends_of_friends")) {
@@ -333,7 +372,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             });
 
 
-            if (item.getLocation() != null && !item.getLocation().isEmpty()){
+            if (item.getLocation() != null && !item.getLocation().isEmpty()) {
                 atLocation.setText(item.getLocation());
                 atLocation.setVisibility(View.VISIBLE);
                 at.setVisibility(View.VISIBLE);
@@ -349,11 +388,11 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
 
 
-            if (item.getPostAttachment() != null){
-                if (item.getPostAttachment().getVideos() != null && item.getPostAttachment().getVideos().length > 0){
+            if (item.getPostAttachment() != null) {
+                if (item.getPostAttachment().getVideos() != null && item.getPostAttachment().getVideos().length > 0) {
                     if (video != null) {
                         video.setVisibility(View.VISIBLE);
-                        video.setVideoSource(item.getPostAttachment().getVideos()[0].getPath());
+                        ///video.setVideoSource(item.getPostAttachment().getVideos()[0].getPath());
 
                         video.setOnVideoBufferingListener(new VideoStateListeners.OnVideoBufferingListener() {
                             @Override
@@ -365,7 +404,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         video.setOnVideoErrorListener(new VideoStateListeners.OnVideoErrorListener() {
                             @Override
                             public void OnVideoError(int what, int extra) {
-                                Log.i("VidaaaVideo", "OnVideoError: " + "extra: "  + extra);
+                                Log.i("VidaaaVideo", "OnVideoError: " + "extra: " + extra);
                             }
                         });
 
@@ -390,31 +429,6 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             }
 
-
-//            if (item.getPostAttachment() != null){
-//                if (item.getPostAttachment().getVideos() != null && item.getPostAttachment().getVideos().length > 0){
-//                    Uri vidUri = Uri.parse(item.getPostAttachment().getVideos()[0].getPath());
-//                    if (video != null) {
-//                        video.setVisibility(View.VISIBLE);
-//                        video.setVideoURI(vidUri);
-//                        MediaController vidControl = new MediaController(context);
-//                        vidControl.setAnchorView(video);
-//                        video.setMediaController(vidControl);
-//                    }
-//                } else {
-//                    if (video != null) {
-//                        video.setVisibility(View.GONE);
-//                    }
-//                }
-//            }
-//            if (video != null) {
-//                video.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        video.start();
-//                    }
-//                });
-//            }
 
             if (item.getPostAttachment() != null && item.getPostAttachment().getImages() != null && item.getPostAttachment().getImages().length > 0) {
                 if (item.getPostAttachment().getImages().length == 1) {
@@ -541,7 +555,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //            dateView.setText(DateUtils.getRelativeDateTimeString(context, milliseconds, millisecondsFromNow, DateUtils.DAY_IN_MILLIS, 0));
 
 
-            if (!(item.getPostText() == null || item.getPostText().contentEquals("null"))){
+            if (!(item.getPostText() == null || item.getPostText().contentEquals("null"))) {
                 postTextView.setText(item.getPostText());
 //                try {
 //                    postTextView.setText(URLDecoder.decode(item.getPostText(), "UTF-8"));
@@ -706,7 +720,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     item.setLikes(likes);
                 }
 
-                   @Override
+                @Override
                 public void onError(int error) {
 
                 }
@@ -978,6 +992,32 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    private class SuggestedFriendsHolder extends RecyclerView.ViewHolder {
+
+        RecyclerView recyclerView;
+
+        public SuggestedFriendsHolder(View itemView) {
+            super(itemView);
+            recyclerView = itemView.findViewById(R.id.suggestedRecView);
+        }
+
+        public void bind(ArrayList<Friend> friends, int pos) {
+            if (friends != null && friends.size() > 0) {
+                FriendsRecyclerAdapter adapter = new FriendsRecyclerAdapter(context, friends, userId, FriendsRecyclerAdapter.SUGGESTED_TYPE, null);
+                recyclerView.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                recyclerView.setAdapter(adapter);
+
+                adapter.setCallback(position -> {
+                    friends.remove(position);
+                    items.get(pos).setFriends(friends.toArray(new Friend[friends.size()]));
+                    notifyItemChanged(pos + 1);
+                    adapter.setFriends(friends);
+                    adapter.notifyDataSetChanged();
+                });
+            }
+        }
+    }
+
     private void showPostPopupWindow(View anchor, final boolean owner, final int postId, final String postOwnerId) {
         final ListPopupWindow popupWindow = new ListPopupWindow(context);
 
@@ -1096,8 +1136,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         Log.i("save_post", response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            if (!jsonObject.getBoolean("error")){
-                               callback.onPostSaved(false);
+                            if (!jsonObject.getBoolean("error")) {
+                                callback.onPostSaved(false);
                             } else {
                                 callback.onPostSaved(true);
                             }

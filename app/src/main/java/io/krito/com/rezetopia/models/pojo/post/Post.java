@@ -5,8 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+import io.krito.com.rezetopia.models.pojo.User;
+
 /**
- * Created by Mona Abdallh on 4/11/2018.
+ * Created by Ahmed Ali on 4/11/2018.
  */
 
 public class Post implements Serializable {
@@ -87,6 +89,17 @@ public class Post implements Serializable {
     @Expose
     private String location;
 
+    @SerializedName("tagged")
+    @Expose
+    private User[] tags;
+
+    public User[] getTags() {
+        return tags;
+    }
+
+    public void setTags(User[] tags) {
+        this.tags = tags;
+    }
 
     public String getLocation() {
         return location;

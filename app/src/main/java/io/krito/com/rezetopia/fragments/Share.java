@@ -35,7 +35,9 @@ import java.util.Map;
 
 import io.krito.com.rezetopia.R;
 import io.krito.com.rezetopia.application.AppConfig;
+import io.krito.com.rezetopia.helper.VolleyCustomRequest;
 import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeedItem;
+import io.krito.com.rezetopia.models.pojo.post.ShareResponse;
 import io.krito.com.rezetopia.views.CustomTextView;
 
 /**
@@ -70,10 +72,14 @@ public class Share extends DialogFragment implements View.OnClickListener{
         return share;
     }
 
-    @Override
+    public void setShareCallback(ShareCallback callback){
+        this.callback = callback;
+    }
+
+    /*@Override
     public void onAttach(Context context) {
-        super.onAttach(context);
         callback = (ShareCallback) context;
+        super.onAttach(context);
     }
 
     @Override
@@ -82,7 +88,7 @@ public class Share extends DialogFragment implements View.OnClickListener{
         if (callback != null){
             callback = null;
         }
-    }
+    }*/
 
     @Nullable
     @Override
@@ -142,25 +148,18 @@ public class Share extends DialogFragment implements View.OnClickListener{
 
 
     private void sharePost(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/share",
-                new Response.Listener<String>() {
+        VolleyCustomRequest stringRequest = new VolleyCustomRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/share", ShareResponse.class,
+                new Response.Listener<ShareResponse>() {
                     @Override
-                    public void onResponse(String response) {
-                        Log.i("share_post", response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            if (!jsonObject.getBoolean("error")){
-                                //todo add data to item
-                                //callback.onPostShared(new NewsFeedItem());
-                                dismiss();
-                            } else {
-                                share.setEnabled(true);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    public void onResponse(ShareResponse response) {
+                        if (!response.isError()){
+                            item.setMessage("friend_share");
+                            item.setSharerUsername(response.getUsername());
+                            callback.onPostShared(new NewsFeedItem());
+                            dismiss();
+                        } else {
+                            share.setEnabled(true);
                         }
-
-
                     }
                 }, new Response.ErrorListener() {
             @Override

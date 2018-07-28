@@ -180,6 +180,9 @@ public class EditPost extends AppCompatActivity implements View.OnClickListener 
             case R.id.privacy:
                 createSheet();
                 break;
+            case R.id.backView:
+                onBackPressed();
+                break;
         }
     }
 
@@ -189,7 +192,7 @@ public class EditPost extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void editPost() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://rezetopia.dev-krito.com/app/reze/user_post.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts/update/post/description/now",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -197,10 +200,6 @@ public class EditPost extends AppCompatActivity implements View.OnClickListener 
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (!jsonObject.getBoolean("error")) {
-                                Intent intent = new Intent();
-                                intent.putExtra("item", item);
-                                intent.putExtra("index", index);
-                                setResult(RESULT_OK, intent);
                                 onBackPressed();
                             } else {
                                 loader.stopProgress();
@@ -212,7 +211,7 @@ public class EditPost extends AppCompatActivity implements View.OnClickListener 
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Log.i("volley error", "onErrorResponse: " + error.getMessage());
+                Log.i("editPostError", "onErrorResponse: " + error.getMessage());
                 loader.stopProgress();
                 if (error instanceof NetworkError) {
                     Log.i("CreateError", getResources().getString(R.string.connection_error));
@@ -237,7 +236,7 @@ public class EditPost extends AppCompatActivity implements View.OnClickListener 
                 map.put("user_id", userId);
                 map.put("post_id", item.getPostId());
                 if (postText.getText().toString().length() > 0) {
-                    map.put("text", postText.getText().toString());
+                    map.put("description", postText.getText().toString());
                 }
 
                 if (item.getPrivacyId() > 0) {
@@ -311,5 +310,14 @@ public class EditPost extends AppCompatActivity implements View.OnClickListener 
                                 .build().show();
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("item", item);
+        intent.putExtra("index", index);
+        setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 }

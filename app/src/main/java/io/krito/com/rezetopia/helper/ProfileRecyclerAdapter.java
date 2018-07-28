@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -20,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.andrognito.flashbar.Flashbar;
+import com.andrognito.flashbar.anim.FlashAnimBarBuilder;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -27,6 +30,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apradanas.prismoji.PrismojiTextView;
+import com.github.aakira.expandablelayout.ExpandableLayout;
+import com.github.aakira.expandablelayout.ExpandableLinearLayout;
+import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -35,6 +41,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,11 +52,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.krito.com.rezetopia.R;
 import io.krito.com.rezetopia.activities.AboutProfile;
 import io.krito.com.rezetopia.activities.Albums;
+import io.krito.com.rezetopia.activities.Friends;
 import io.krito.com.rezetopia.activities.ImageViewer;
 import io.krito.com.rezetopia.activities.Profile;
 import io.krito.com.rezetopia.models.operations.HomeOperations;
 import io.krito.com.rezetopia.models.operations.ProfileOperations;
 import io.krito.com.rezetopia.models.pojo.User;
+import io.krito.com.rezetopia.models.pojo.friends.FriendsResponse;
 import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeedItem;
 import io.krito.com.rezetopia.views.CustomTextView;
 import ru.whalemare.sheetmenu.SheetMenu;
@@ -264,6 +273,10 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         CustomTextView aboutView;
         RelativeLayout operationsLayout;
         TextView dontHavePosts;
+        CustomTextView friendsView;
+        ExpandableLinearLayout expandableLayout;
+        FriendsRecyclerAdapter adapter;
+        RecyclerView friendsRecView;
 
 
         public HeaderViewHolder(View itemView) {
@@ -279,6 +292,9 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             aboutView = itemView.findViewById(R.id.about);
             operationsLayout = itemView.findViewById(R.id.operationsLayout);
             dontHavePosts = itemView.findViewById(R.id.dontHavePosts);
+            friendsView = itemView.findViewById(R.id.friends);
+            expandableLayout = itemView.findViewById(R.id.expandableLayout);
+            friendsRecView = itemView.findViewById(R.id.friendsRecView);
 
 //            if (havePosts){
 //                dontHavePosts.setVisibility(View.GONE);
@@ -313,6 +329,49 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     intent.putExtra("name", user.getName());
                     context.startActivity(intent);
                 }
+            });
+
+            friendsView.setOnClickListener(v -> {
+
+                Intent intent = new Intent(context, Friends.class);
+                context.startActivity(intent);
+//                if (expandableLayout.isExpanded()){
+//                    expandableLayout.toggle();
+//                }
+
+//                if (adapter == null){
+//                    ProfileOperations.fetchFriends(loggedInUserId, "0");
+//                    ProfileOperations.setFriendsCallback(new ProfileOperations.FriendsCallback() {
+//                        @Override
+//                        public void onSuccess(FriendsResponse response) {
+//                            expandableLayout.toggle();
+//                            Log.i("getFriendsSuccess", "onSuccess: " + response.getFriends().length);
+//                            adapter = new FriendsRecyclerAdapter(context, new ArrayList<>(Arrays.asList(response.getFriends())), loggedInUserId, position -> {
+//
+//                            });
+//
+//                            friendsRecView.setAdapter(adapter);
+//                            friendsRecView.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+//                            //expandableLayout.expand();
+//                        }
+//
+//                        @Override
+//                        public void onError(int error) {
+//                            Log.i("getFriendsFailure", "onError: ");
+//                        }
+//
+//                        @Override
+//                        public void onEmptyResult() {
+//                            Log.i("getFriendsEmptyResult", "onEmptyResult: ");
+//                            callback.onEmptyFriends();
+//                        }
+//                    });
+//
+//
+//                } else {
+//
+//                }
+
             });
 
             if (user.getImageUrl() != null && !user.getImageUrl().isEmpty()) {
@@ -516,6 +575,10 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     addFriendBtn.setEnabled(true);
                 }
             });
+        }
+
+        private void getFriends(){
+
         }
     }
 
@@ -1306,5 +1369,7 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onStartShare(NewsFeedItem item);
 
         void onPostSaved(boolean error);
+
+        void onEmptyFriends();
     }
 }

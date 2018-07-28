@@ -26,6 +26,7 @@ import java.util.Map;
 import io.krito.com.rezetopia.R;
 import io.krito.com.rezetopia.helper.VolleyCustomRequest;
 import io.krito.com.rezetopia.models.pojo.User;
+import io.krito.com.rezetopia.models.pojo.friends.FriendsResponse;
 import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeed;
 import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeedItem;
 import io.krito.com.rezetopia.models.pojo.post.ApiResponse;
@@ -45,15 +46,25 @@ public class ProfileOperations {
     private static SendFriendRequestCallback friendRequestCallback;
     private static CancelDeleteFriendRequestCallback cancelDeleteFriendRequestCallback;
     private static NewsFeedCallback feedCallback;
+    private static FriendsCallback friendsCallback;
     private static AcceptFriendRequestCallback acceptCallback;
     private static String profileCursor = "0";
+    private static String friendsCursor = "0";
 
     public static void setCursor(String profileCursor) {
         ProfileOperations.profileCursor = profileCursor;
     }
 
+    public static void setFriendsCursor(String friendsCursor) {
+        ProfileOperations.friendsCursor = friendsCursor;
+    }
+
     public static void setFriendRequestCallback(SendFriendRequestCallback friendRequestCallback) {
         ProfileOperations.friendRequestCallback = friendRequestCallback;
+    }
+
+    public static void setFriendsCallback(FriendsCallback friendsCallback) {
+        ProfileOperations.friendsCallback = friendsCallback;
     }
 
     public static void setCancelDeleteFriendRequestCallback(CancelDeleteFriendRequestCallback cancelDeleteFriendRequestCallback) {
@@ -98,6 +109,10 @@ public class ProfileOperations {
 
     public static void fetchNewsFeed(String userId, String cursor) {
         new FetchNewsFeedTask().execute(userId, cursor);
+    }
+
+    public static void fetchFriends(String userId, String cursor) {
+        new FetchFriendsTask().execute(userId, cursor);
     }
 
     public static void acceptFriendRequest(String from, String to){
@@ -267,7 +282,7 @@ public class ProfileOperations {
         protected Void doInBackground(final String... strings) {
             String url = baseUrl + "addfriend.php";
 
-            StringRequest post = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/friends", new Response.Listener<String>() {
+            StringRequest post = new StringRequest(Request.Method.POST, "https://rezetopia.com/Apis/friends/friend/add/request", new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -286,7 +301,7 @@ public class ProfileOperations {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     String message = null;
-                    Log.i("volley error", "onErrorResponse: " + error.getMessage());
+                    Log.i("addError", "onErrorResponse: " + error.getMessage());
                     if (error instanceof NetworkError) {
                         //message = String.valueOf();
                         friendRequestCallback.onError(R.string.checkingNetwork);
@@ -337,7 +352,7 @@ public class ProfileOperations {
         @Override
         protected Void doInBackground(final String... strings) {
             String url = baseUrl + "addfriend.php";
-
+            url = "https://rezetopia.com/Apis/friends/cancel/request";
             StringRequest post = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -408,7 +423,7 @@ public class ProfileOperations {
         @Override
         protected Void doInBackground(final String... strings) {
             String url = baseUrl + "addfriend.php";
-
+            url = "https://rezetopia.com/Apis/friends/accept";
             StringRequest post = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -428,7 +443,7 @@ public class ProfileOperations {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     String message = null;
-                    Log.i("volley error", "onErrorResponse: " + error.getMessage());
+                    Log.i("acceptError", "onErrorResponse: " + error.getMessage());
                     if (error instanceof NetworkError) {
                         //message = String.valueOf();
                         acceptCallback.onError(R.string.checkingNetwork);
@@ -516,7 +531,7 @@ public class ProfileOperations {
                                     profileCursor = String.valueOf(Integer.parseInt(profileCursor) + 1);
                                     Log.i("response_cursor", "onResponse: " + profileCursor);
                                 }
-                            } else if (response.isError() && response.getNextCursor().contentEquals("0")) {
+                            } else if (response.isError()) {
                                 feedCallback.onEmptyResult();
                             } else {
                                 feedCallback.onError(R.string.unknown_error);
@@ -566,6 +581,68 @@ public class ProfileOperations {
         }
     }
 
+    public static class FetchFriendsTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(final String... strings) {
+            String url = baseUrl + "reze/user_post.php";
+
+            url = "https://rezetopia.com/Apis/friends?user_id=" + strings[0] + "&cursor=" + friendsCursor;
+
+            VolleyCustomRequest request = new VolleyCustomRequest(Request.Method.GET, url, FriendsResponse.class,
+                    new Response.Listener<FriendsResponse>() {
+                        @Override
+                        public void onResponse(FriendsResponse response) {
+                            if (!response.isError()) {
+                                if (response.getFriends() != null && response.getFriends().length > 0){
+                                    friendsCallback.onSuccess(response);
+                                    friendsCursor = String.valueOf(Integer.parseInt(friendsCursor) + 1);
+                                    Log.i("friends_cursor", "onResponse: " + friendsCursor);
+                                }
+                            } else if (response.isError()) {
+                                friendsCallback.onEmptyResult();
+                            } else {
+                                friendsCallback.onError(R.string.unknown_error);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error instanceof NetworkError) {
+                        friendsCallback.onError(R.string.connection_error);
+                        return;
+                    } else if (error instanceof ServerError) {
+                        friendsCallback.onError(R.string.server_error);
+                        return;
+                    } else if (error instanceof AuthFailureError) {
+                        friendsCallback.onError(R.string.connection_error);
+                        return;
+                    } else if (error instanceof ParseError) {
+                        friendsCallback.onError(R.string.parsing_error);
+                        return;
+                    } else if (error instanceof NoConnectionError) {
+                        friendsCallback.onError(R.string.connection_error);
+                        return;
+                    } else if (error instanceof TimeoutError) {
+                        friendsCallback.onError(R.string.time_out);
+                        return;
+                    }
+                    friendsCallback.onError(R.string.connection_error);
+                }
+            });
+
+            /*
+            * */
+
+            request.setRetryPolicy(new DefaultRetryPolicy(5000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            requestQueue.add(request);
+            return null;
+        }
+    }
+
     public interface UserInfoCallback {
         void onSuccess(User user);
 
@@ -591,6 +668,12 @@ public class ProfileOperations {
 
     public interface NewsFeedCallback {
         void onSuccess(NewsFeed newsFeed);
+        void onError(int error);
+        void onEmptyResult();
+    }
+
+    public interface FriendsCallback {
+        void onSuccess(FriendsResponse response);
         void onError(int error);
         void onEmptyResult();
     }

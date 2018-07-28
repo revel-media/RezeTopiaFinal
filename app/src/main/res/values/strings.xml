@@ -54,7 +54,10 @@
     <string name="spinner_foot">Select Dominant Foot</string>
     <string name="countries_array">Select nationality</string>
     <string name="checkingNetwork">There is an error in network</string>
+    <string name="empty_friends">You don not have friends yet</string>
     <string name="post_save_success">Post has been saved</string>
+    <string name="done">Done</string>
+    <string name="others">others</string>
     <string name="post_save_failure">Post save error</string>
     <string name="server_error">The server could not be found. Please try again after some time!</string>
     <string name="connection_error">Cannot connect to Internet&#8230;Please check your connection!</string>
@@ -126,7 +129,7 @@
     <string name="video">Video</string>
     <string name="image_video">Image/Video</string>
     <string name="check_in">Check in</string>
-    <string name="tag">Tag friend</string>
+    <string name="tag">Tag friends</string>
     <string name="product">Product</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
@@ -207,7 +210,7 @@
     <string name="post_small">post</string>
     <string name="invalid_email">This email already taken</string>
     <string name="share_to_pp">Share</string>
-    <string name="share_to_friend">Share to friend</string>
+    <string name="share_to_friend">Share to friends</string>
     <string name="timelineShare_hint">Share on Your Timeline</string>
     <string-array name="object_array">
 

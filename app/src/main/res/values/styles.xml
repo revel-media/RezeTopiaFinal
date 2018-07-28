@@ -8,6 +8,11 @@
         <item name="colorAccent">#E1E1E1</item>
     </style>
 
+    <style name="AppBarStyle" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="searchViewStyle">@style/Widget.AppCompat.SearchView.ActionBar</item>
+    </style>
+
     <style name="DialogStyle">
         <item name="android:bottomBright">@android:color/transparent</item>
         <item name="android:bottomDark">@android:color/transparent</item>

@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.krito.com.rezetopia.R;
-import io.krito.com.rezetopia.helper.VolleyCasheRequest;
 import io.krito.com.rezetopia.helper.VolleyCustomRequest;
 import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeed;
 import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeedItem;
@@ -112,6 +111,7 @@ public class HomeOperations {
                                 item.setPostText(post.getText());
                                 item.setPostAttachment(post.getAttachment());
                                 item.setPrivacyId(post.getPrivacyId());
+                                item.setTags(post.getTags());
                                 if (post.getMessage() != null && !post.getMessage().isEmpty()){
                                     item.setMessage(post.getMessage());
                                     if (post.getMessage().contentEquals("like_friends_of_friends")){
@@ -153,6 +153,15 @@ public class HomeOperations {
                                 item.setType(NewsFeedItem.PP_TYPE);
                                 items.add(item);
                             }
+                        }
+
+                        //todo add suggested friends to home ui
+                        if (response.getFriends() != null && response.getFriends().length > 0){
+                            Log.i("responseFriends", "onResponse: " + response.getFriends().length);
+                            NewsFeedItem item = new NewsFeedItem();
+                            item.setFriends(response.getFriends());
+                            item.setType(NewsFeedItem.SUGGESTED_FRIENDS_TYPE);
+                            items.add(item);
                         }
 
                         if (newsFeed.getItems().size() > 0){

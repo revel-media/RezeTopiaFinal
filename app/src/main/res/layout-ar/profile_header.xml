@@ -1,6 +1,6 @@
-<LinearLayout
-    android:layout_width="match_parent"
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -360,7 +360,7 @@
     <LinearLayout
         android:padding="5dp"
         android:background="@drawable/post_background"
-        android:weightSum="3"
+        android:weightSum="4"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="@dimen/dimen_10"
@@ -376,13 +376,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <!--<io.krito.com.rezetopia.views.CustomTextView-->
-            <!--android:id="@+id/skills"-->
-            <!--android:textAlignment="center"-->
-            <!--android:text="@string/skills"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"/>-->
+        <io.krito.com.rezetopia.views.CustomTextView
+            android:id="@+id/friends"
+            android:textAlignment="center"
+            android:text="@string/friends"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
         <io.krito.com.rezetopia.views.CustomTextView
             android:id="@+id/profilePhotos"
@@ -400,6 +400,24 @@
             android:layout_weight="1"/>
 
     </LinearLayout>
+
+    <com.github.aakira.expandablelayout.ExpandableLinearLayout
+        android:visibility="gone"
+        android:id="@+id/expandableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_10"
+        app:ael_expanded="false"
+        app:ael_duration="500"
+        app:ael_interpolator="bounce"
+        app:ael_orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/friendsRecView"/>
+
+    </com.github.aakira.expandablelayout.ExpandableLinearLayout>
 
     <RelativeLayout
         android:layout_marginStart="@dimen/dimen_10"

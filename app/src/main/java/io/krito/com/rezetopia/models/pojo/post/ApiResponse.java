@@ -3,6 +3,8 @@ package io.krito.com.rezetopia.models.pojo.post;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.krito.com.rezetopia.models.pojo.friends.Friend;
+
 public class ApiResponse {
 
     @SerializedName("next_cursor")
@@ -17,6 +19,10 @@ public class ApiResponse {
     @Expose
     private Post[] posts;
 
+    @SerializedName("suggested_friends")
+    @Expose
+    private Friend[] friends;
+
     @SerializedName("pps")
     @Expose
     private Pp[] pps;
@@ -28,6 +34,14 @@ public class ApiResponse {
     @SerializedName("message")
     @Expose
     private String message;
+
+    public Friend[] getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Friend[] friends) {
+        this.friends = friends;
+    }
 
     public Pp[] getPps() {
         return pps;

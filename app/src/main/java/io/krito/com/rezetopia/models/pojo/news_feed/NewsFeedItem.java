@@ -2,6 +2,8 @@ package io.krito.com.rezetopia.models.pojo.news_feed;
 
 import java.io.Serializable;
 
+import io.krito.com.rezetopia.models.pojo.User;
+import io.krito.com.rezetopia.models.pojo.friends.Friend;
 import io.krito.com.rezetopia.models.pojo.post.Attachment;
 
 public class NewsFeedItem implements Serializable {
@@ -12,6 +14,7 @@ public class NewsFeedItem implements Serializable {
     public static final int VENDOR_POST_TYPE = 2;
     public static final int EVENT_TYPE = 3;
     public static final int GROUP_POSTS_TYPE = 4;
+    public static final int SUGGESTED_FRIENDS_TYPE = 5;
 
     private int type;
     private int id;
@@ -48,6 +51,16 @@ public class NewsFeedItem implements Serializable {
     private String shareTimestamp;
     private int privacyId;
     private String location;
+    private Friend[] friends;
+    private User[] tags;
+
+    public User[] getTags() {
+        return tags;
+    }
+
+    public void setTags(User[] tags) {
+        this.tags = tags;
+    }
 
     public String getCoverUrl() {
         return coverUrl;
@@ -319,6 +332,14 @@ public class NewsFeedItem implements Serializable {
 
     public void setProductSoldAmount(int productSoldAmount) {
         this.productSoldAmount = productSoldAmount;
+    }
+
+    public Friend[] getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Friend[] friends) {
+        this.friends = friends;
     }
 
     public String getLocation() {

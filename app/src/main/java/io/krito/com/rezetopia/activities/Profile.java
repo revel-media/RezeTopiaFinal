@@ -359,6 +359,17 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         }
 
                         @Override
+                        public void onEmptyFriends() {
+                            Flashbar.Builder builder = new Flashbar.Builder(Profile.this);
+                            builder.gravity(Flashbar.Gravity.BOTTOM)
+                                    .backgroundColor(R.color.red2)
+                                    .enableSwipeToDismiss()
+                                    .message(R.string.empty_friends)
+                                    .enterAnimation(new FlashAnimBarBuilder(Profile.this).slideFromRight().duration(200))
+                                    .build().show();
+                        }
+
+                        @Override
                         public void onStartCreatePost() {
                             Intent intent = new Intent(Profile.this, CreatePost.class);
                             startActivityForResult(intent, CREATE_POST_RESULT);
@@ -431,6 +442,17 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                     intent.putExtra("item" , item);
                     intent.putExtra("index" , index);
                     startActivityForResult(intent, EDIT_POST_RESULT);
+                }
+
+                @Override
+                public void onEmptyFriends() {
+                    Flashbar.Builder builder = new Flashbar.Builder(Profile.this);
+                    builder.gravity(Flashbar.Gravity.BOTTOM)
+                            .backgroundColor(R.color.red2)
+                            .enableSwipeToDismiss()
+                            .message(R.string.empty_friends)
+                            .enterAnimation(new FlashAnimBarBuilder(Profile.this).slideFromRight().duration(200))
+                            .build().show();
                 }
 
                 @Override

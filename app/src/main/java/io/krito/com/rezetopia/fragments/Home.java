@@ -48,7 +48,7 @@ import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeedItem;
 import io.krito.com.rezetopia.models.pojo.post.PostResponse;
 import io.krito.com.rezetopia.receivers.ConnectivityReceiver;
 
-public class Home extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener , Share.ShareCallback{
+public class Home extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     private static final int COMMENT_ACTIVITY_RESULT = 1001;
     private static final int CREATE_POST_RESULT = 1002;
@@ -315,6 +315,9 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
                 @Override
                 public void onStartShare(NewsFeedItem item) {
                     Share share = Share.createShareFragment(item);
+                    share.setShareCallback(item1 -> {
+                        adapter.addPostToTop(item);
+                    });
                     share.show(getActivity().getFragmentManager(), null);
                 }
 
@@ -333,7 +336,7 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
 
                 @Override
                 public void onPostSaved(boolean error) {
-                    String saveMessage = error ? getResources().getString(R.string.post_save_failure):getResources().getString(R.string.post_save_success);
+                    String saveMessage = error ? getResources().getString(R.string.post_save_failure) : getResources().getString(R.string.post_save_success);
                     Flashbar.Builder builder = new Flashbar.Builder(getActivity());
                     builder.gravity(Flashbar.Gravity.BOTTOM)
                             .backgroundColor(R.color.red2)
@@ -355,14 +358,10 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
         }
     }
 
-    @Override
-    public void onPostShared(NewsFeedItem item) {
-        //adapter.addPostToTop(item);
-    }
-
     public interface HomeCallback {
         void onScroll(boolean show);
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -395,6 +394,7 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
                     item.setOwnerId(returnPost.getUserId());
                     item.setOwnerName(returnPost.getUsername());
                     item.setPostText(returnPost.getText());
+                    item.setLocation(returnPost.getLocation());
                     item.setPostAttachment(returnPost.getAttachment());
                     item.setLikes(null);
                     item.setCommentSize(0);

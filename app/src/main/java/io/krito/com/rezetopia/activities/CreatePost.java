@@ -56,6 +56,7 @@ import com.apradanas.prismoji.PrismojiEditText;
 import com.apradanas.prismoji.PrismojiPopup;
 import com.apradanas.prismoji.listeners.OnSoftKeyboardCloseListener;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
+import com.squareup.picasso.Picasso;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
 import com.tangxiaolv.telegramgallery.GalleryConfig;
 import com.taskail.googleplacessearchdialog.SimplePlacesSearchDialog;
@@ -94,6 +95,7 @@ import io.krito.com.rezetopia.helper.ListPopupWindowAdapter;
 import io.krito.com.rezetopia.helper.MenuCustomItem;
 import io.krito.com.rezetopia.helper.Upload;
 import io.krito.com.rezetopia.helper.VolleyMultipartRequest;
+import io.krito.com.rezetopia.models.pojo.friends.Friend;
 import io.krito.com.rezetopia.models.pojo.post.Attachment;
 import io.krito.com.rezetopia.models.pojo.post.Media;
 import io.krito.com.rezetopia.models.pojo.post.PostResponse;
@@ -109,6 +111,8 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
     private static final int TYPE_VIDEO = 1;
     private static final int TYPE_TEXT_VIDEO = 2;
     private static final int PICK_IMAGE_REQUEST_CODE = 1006;
+    private static final int TAGS_REQUEST_CODE = 2009;
+
     TextView createPost;
     TextView privacyText;
     ImageView privacyIcon;
@@ -126,6 +130,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
     TextView actualLocationView;
     FrameLayout deleteLocationView;
     FrameLayout createPostRoot;
+    RecyclerView addedTagsRecyclerView;
 
 
     private String decodedVideo;
@@ -138,7 +143,9 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
     private int postType;
     private String privacy = "public";
     private StringRequest stringRequest;
-    PrismojiPopup prismojiPopup;
+    private PrismojiPopup prismojiPopup;
+    private ArrayList<Friend> tags;
+    private AddedTagsRecyclerAdapter tagsRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +174,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
         actualLocationView = findViewById(R.id.actualLocationView);
         deleteLocationView = findViewById(R.id.deleteLocationView);
         createPostRoot = findViewById(R.id.createPostRoot);
+        addedTagsRecyclerView = findViewById(R.id.tagRecView);
 
 
 
@@ -180,6 +188,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
         location.setOnClickListener(this);
         deleteLocationView.setOnClickListener(this);
         postText.setOnClickListener(this);
+        tag.setOnClickListener(this);
 
         prismojiPopup = PrismojiPopup.Builder
                 .fromRootView(createPostRoot)
@@ -351,6 +360,8 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
                 deleteLocationView.setVisibility(View.GONE);
                 break;
             case R.id.tagFriend:
+                Intent intent = new Intent(CreatePost.this, FriendsTag.class);
+                startActivityForResult(intent, TAGS_REQUEST_CODE);
                 break;
             case R.id.emoView:
                 if (prismojiPopup.isShowing()){
@@ -469,6 +480,13 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
             if (media != null && media.size() > 0) {
                 updateImageHolder();
             }
+        } else if (requestCode == TAGS_REQUEST_CODE && data != null){
+            if (data.getSerializableExtra("tags") != null) {
+                tags = (ArrayList<Friend>) data.getSerializableExtra("tags");
+                if (tags != null && tags.size() > 0){
+                    updateAddedTagsList();
+                }
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -499,129 +517,6 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
             createPostMultiPart();
         //uploadVideo(postText.getText().toString());
         //uploadMultipart(postText.getText().toString());*/
-    }
-
-    private void createPost() {
-        stringRequest = new StringRequest(Request.Method.POST, "http://127.0.0.1:80/reze/user_post.php",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("CreatePostResponse", "onResponse: " + response);
-                        PostResponse postResponse = new PostResponse();
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-
-                            if (jsonObject.getInt("post_id") > 0) {
-                                postResponse.setUserId(userId);
-                                postResponse.setPostId(jsonObject.getInt("post_id"));
-                                postResponse.setUsername(jsonObject.getString("username"));
-                                postResponse.setCreatedAt(jsonObject.getString("createdAt"));
-                                postResponse.setLocation(jsonObject.getString("location"));
-                                if (jsonObject.getString("text") != null && !jsonObject.getString("text").isEmpty()) {
-                                    postResponse.setText(jsonObject.getString("text"));
-                                }
-
-                                if (jsonObject.getJSONArray("urls") != null && jsonObject.getJSONArray("urls").length() > 0) {
-                                    JSONArray urls = jsonObject.getJSONArray("urls");
-                                    Attachment attachmentResponse = new Attachment();
-                                    Media[] mediaArray = new Media[urls.length()];
-                                    for (int i = 0; i < urls.length(); i++) {
-                                        Log.i("CreatePostResponse", "onResponse: " + urls.getString(i));
-                                        Media media = new Media();
-                                        media.setPath(urls.getString(i));
-                                        mediaArray[i] = media;
-                                    }
-                                    attachmentResponse.setImages(mediaArray);
-                                    postResponse.setAttachment(attachmentResponse);
-                                }
-                            } else {
-                                loader.stopProgress();
-                            }
-
-                            /*//todo add
-                            postResponse.setPostId(jsonObject.getInt("post_id"));
-                            postResponse.setUsername(jsonObject.getString("username"));
-                            postResponse.setCreatedAt(jsonObject.getString("createdAt"));
-                            postResponse.setUserId(userId);
-                            postResponse.setText(null);
-                            if (postType == TYPE_TEXT) {
-                                postResponse.setText(jsonObject.getString("text"));
-                            }
-                            if (jsonObject.getJSONArray("urls") != null && jsonObject.getJSONArray("urls").length() > 0){
-                                JSONArray urls = jsonObject.getJSONArray("urls");
-                                Media media = new Media();
-                                media.setPath(urls.getString(0));
-                                Attachment attachmentResponse = new Attachment();
-                                attachmentResponse.setImages(new Media[]{media});
-                                postResponse.setAttachment(attachmentResponse);
-                            }
-
-
-                            Intent intent = new Intent();
-                            intent.putExtra("post", response);
-                            setResult(RESULT_OK, intent);
-                            onBackPressed();*/
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (postResponse.getPostId() > 0) {
-                            Intent intent = new Intent();
-                            intent.putExtra("post", postResponse);
-                            setResult(RESULT_OK, intent);
-                            onBackPressed();
-                        } else {
-                            loader.stopProgress();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //Log.i("volley error", "onErrorResponse: " + error.getMessage());
-                loader.stopProgress();
-                if (error instanceof NetworkError) {
-                    Log.i("CreateError", getResources().getString(R.string.connection_error));
-                } else if (error instanceof ServerError) {
-                    Log.i("CreateError", getResources().getString(R.string.server_error));
-                } else if (error instanceof AuthFailureError) {
-                    Log.i("CreateError", getResources().getString(R.string.connection_error));
-                } else if (error instanceof ParseError) {
-                    Log.i("CreateError", getResources().getString(R.string.parsing_error));
-                } else if (error instanceof NoConnectionError) {
-                    Log.i("CreateError", getResources().getString(R.string.connection_error));
-                } else if (error instanceof TimeoutError) {
-                    Log.i("CreateError", getResources().getString(R.string.time_out));
-                }
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<>();
-
-                if (encodedImages != null && encodedImages.size() > 0) {
-                    for (String value : encodedImages) {
-                        map.put(String.valueOf(encodedImages.indexOf(value)), value);
-                    }
-                    map.put("images_size", String.valueOf(encodedImages.size()));
-                }
-
-                if (decodedVideo != null && !decodedVideo.isEmpty()) {
-                    map.put("video", decodedVideo);
-                }
-
-                map.put("method", "create_post");
-                map.put("userId", userId);
-                if (postText.getText().toString().length() > 0) {
-                    map.put("post_text", postText.getText().toString());
-                }
-
-                if (privacy != null && !privacy.isEmpty()) {
-                    map.put("privacy", privacy);
-                }
-
-                return map;
-            }
-        };
     }
 
     private void createPostMultiPart() {
@@ -735,6 +630,15 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
                     params.put("imageSize", String.valueOf(selectedImages.size()));
 
                 }
+
+                if (tags != null && tags.size() > 0){
+                    params.put("tags_size", String.valueOf(tags.size()));
+
+                    for (int i=0; i < tags.size(); i++){
+                        params.put("tag" + i, String.valueOf(tags.get(i).getId()));
+                    }
+                }
+
                 return params;
             }
 
@@ -827,6 +731,50 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+    private class AddedTagsViewHolder extends RecyclerView.ViewHolder{
+
+        TextView usernameView;
+
+        public AddedTagsViewHolder(View itemView) {
+            super(itemView);
+
+            usernameView = itemView.findViewById(R.id.addedTagNameView);
+        }
+
+        public void bind(Friend friend, int pos){
+            usernameView.setText(friend.getUsername());
+
+            itemView.setOnClickListener(v -> {
+                tags.remove(pos);
+                updateAddedTagsList();
+
+                if (tags.size() == 0){
+                    addedTagsRecyclerView.setVisibility(View.GONE);
+                }
+            });
+        }
+    }
+
+    private class AddedTagsRecyclerAdapter extends RecyclerView.Adapter<AddedTagsViewHolder>{
+
+        @NonNull
+        @Override
+        public AddedTagsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(CreatePost.this).inflate(R.layout.added_tags_card, parent, false);
+            return new AddedTagsViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull AddedTagsViewHolder holder, int position) {
+            holder.bind(tags.get(position), position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return tags.size();
+        }
+    }
+
     private void updateImageHolder() {
         if (imageVideoAdapter == null) {
             imageVideoAdapter = new ImageVideoRecyclerAdapter();
@@ -845,113 +793,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
         public String path;
     }
 
-    private boolean decodeVideo() {
-        if (selectedVideo != null && !selectedVideo.isEmpty()) {
-            File originalFile = new File(selectedVideo);
-
-            int file_size = Integer.parseInt(String.valueOf(originalFile.length() / 1024));
-
-            if (file_size <= EncodeBase64.availableMemoryMB() - EncodeBase64.SAFETY_MEMORY_BUFFER) {
-                try {
-                    FileInputStream fileInputStreamReader = new FileInputStream(originalFile);
-                    byte[] bytes = new byte[(int) originalFile.length()];
-                    fileInputStreamReader.read(bytes);
-                    decodedVideo = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    Log.i("DecodedVideo", "performUserUpload: " + decodedVideo);
-                    return true;
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            Log.i("AviSize", "performUserUpload: " + EncodeBase64.availableMemoryMB());
-            Log.i("fileSize", "performUserUpload: " + file_size);
-            return false;
-        }
-
-        return false;
-    }
-
-    private void uploadVideo(final String postText) {
-        class UploadVideo extends AsyncTask<Void, Void, Boolean> {
-            @Override
-            protected void onPostExecute(Boolean s) {
-                super.onPostExecute(s);
-                loader.stopProgress();
-            }
-
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                Upload u = new Upload();
-                return u.uploadVideo(selectedVideo, postText);
-            }
-        }
-        UploadVideo uv = new UploadVideo();
-        uv.execute();
-    }
-
-    public void uploadMultipart(String post) {
-        try {
-            String uploadId = UUID.randomUUID().toString();
-            //Creating a multi part request
-            new MultipartUploadRequest(this, uploadId, "http://rezetopia.dev-krito.com/app/reze/user_post.php")
-                    .addFileToUpload(selectedVideo, "MP4")
-                    .addParameter("post_text", post)
-                    .addParameter("userId", userId)
-                    .addParameter("method", "video_post")
-                    .setNotificationConfig(new UploadNotificationConfig())
-                    .setMaxRetries(2)
-                    .setUtf8Charset()
-                    .startUpload();
-
-        } catch (Exception exc) {
-            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void multiPartRequest() {
-        VolleyMultipartRequest request = new VolleyMultipartRequest(Request.Method.POST, "https://rezetopia.dev-krito.com/app/reze/user_post.php",
-                new Response.Listener<NetworkResponse>() {
-                    @Override
-                    public void onResponse(NetworkResponse response) {
-                        String responseString = new String(response.data);
-                        Log.i("responseString", "onResponse: " + responseString);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("userId", userId);
-                params.put("post_text", postText.getText().toString());
-                return params;
-            }
-
-            @Override
-            protected Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
-                new DataPart();
-                params.put("video_file", new DataPart("video.mp4", convert(selectedVideo), "image/mp4"));
-                return params;
-            }
-        };
-
-        RezetopiaApp.getInstance().getRequestQueue().add(request);
-    }
-
     public byte[] convert(String path) {
-
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(path);
@@ -994,5 +836,19 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
                                 .build().show();
                     }
                 });
+    }
+
+    private void updateAddedTagsList(){
+        if (tagsRecyclerAdapter == null) {
+            addedTagsRecyclerView.setVisibility(View.VISIBLE);
+            tagsRecyclerAdapter = new AddedTagsRecyclerAdapter();
+            addedTagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            addedTagsRecyclerView.setAdapter(tagsRecyclerAdapter);
+        } else {
+            if (tags.size() > 0){
+                addedTagsRecyclerView.setVisibility(View.VISIBLE);
+            }
+            tagsRecyclerAdapter.notifyDataSetChanged();
+        }
     }
 }
