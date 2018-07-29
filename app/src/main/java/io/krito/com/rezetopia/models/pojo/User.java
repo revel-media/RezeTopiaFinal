@@ -3,7 +3,9 @@ package io.krito.com.rezetopia.models.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     @SerializedName("id")
     @Expose
     private int id;

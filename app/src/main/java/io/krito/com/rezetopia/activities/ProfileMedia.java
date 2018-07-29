@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.VideoView;
 
 import com.andrognito.flashbar.Flashbar;
 import com.andrognito.flashbar.anim.FlashAnimBarBuilder;
@@ -30,26 +31,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.krito.com.rezetopia.R;
-import io.krito.com.rezetopia.application.AppConfig;
 import io.krito.com.rezetopia.application.RezetopiaApp;
 import io.krito.com.rezetopia.helper.VolleyCustomRequest;
 import io.krito.com.rezetopia.models.pojo.post.Album;
 import io.krito.com.rezetopia.models.pojo.post.ApiAlbums;
+import io.krito.com.rezetopia.models.pojo.post.Media;
 import io.krito.com.rezetopia.views.CustomTextView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class Albums extends AppCompatActivity {
+public class ProfileMedia extends AppCompatActivity {
+
 
     private static final String USER_ID_EXTRA = "user_id";
 
     String userId;
-    ArrayList<Album> albums;
+    ArrayList<Media> mediaList;
     RecyclerView recyclerView;
     AlbumsAdapter adapter;
 
     public static Intent createIntent(Context context, String id){
-        Intent intent = new Intent(context, Albums.class);
+        Intent intent = new Intent(context, ProfileMedia.class);
         intent.putExtra(id, USER_ID_EXTRA);
         return intent;
     }
@@ -73,7 +75,7 @@ public class Albums extends AppCompatActivity {
                     @Override
                     public void onResponse(ApiAlbums response) {
                         if (!response.isError()){
-                            albums = new ArrayList<>(Arrays.asList(response.getAlbums()));
+                            //mediaList = new ArrayList<>(Arrays.asList(response.getAlbums()));
                             updateUi();
                         }
                     }
@@ -99,47 +101,68 @@ public class Albums extends AppCompatActivity {
         RezetopiaApp.getInstance().getRequestQueue().add(request);
     }
 
-    private class AlbumsHolder extends RecyclerView.ViewHolder{
+    private class ImageHolder extends RecyclerView.ViewHolder{
 
         ImageView image;
-        CustomTextView name;
 
-        public AlbumsHolder(View itemView) {
+        public ImageHolder(View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.albumCover);
-            name = itemView.findViewById(R.id.albumName);
+            image = itemView.findViewById(R.id.imagev);
         }
 
-        public void bind(Album album){
-            String url;
-            name.setText(album.getName());
-            if (album.getName().contentEquals("profile pictures") || album.getName().contentEquals("cover photos")){
-                url = "http://rezetopia.dev-krito.com/".concat(album.getUrl());
-            } else {
-                url = "http://rezetopia.dev-krito.com/app/".concat(album.getUrl());
-            }
+        public void bind(Media media){
 
-            Picasso.with(Albums.this).load(url).into(image);
         }
     }
 
-    private class AlbumsAdapter extends RecyclerView.Adapter<AlbumsHolder>{
+    private class VideoHolder extends RecyclerView.ViewHolder{
+
+        VideoView video;
+
+        public VideoHolder(View itemView) {
+            super(itemView);
+            video = itemView.findViewById(R.id.videov);
+        }
+
+        public void bind(Media media){
+
+        }
+    }
+
+    private class AlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         @NonNull
         @Override
-        public AlbumsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(Albums.this).inflate(R.layout.album_card, parent, false);
-            return new AlbumsHolder(view);
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view;
+            if (viewType == Media.IMAGE_TYPE) {
+                view = LayoutInflater.from(ProfileMedia.this).inflate(R.layout.imagev_card, parent, false);
+                return new ImageHolder(view);
+            } else {
+                view = LayoutInflater.from(ProfileMedia.this).inflate(R.layout.videov_card, parent, false);
+                return new VideoHolder(view);
+            }
         }
 
         @Override
-        public void onBindViewHolder(@NonNull AlbumsHolder holder, int position) {
-            holder.bind(albums.get(position));
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof ImageHolder) {
+                ImageHolder pHolder = (ImageHolder) holder;
+                pHolder.bind(mediaList.get(position ));
+            } else {
+                VideoHolder pHolder = (VideoHolder) holder;
+                pHolder.bind(mediaList.get(position ));
+            }
         }
 
         @Override
         public int getItemCount() {
-            return albums.size();
+            return mediaList.size();
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return mediaList.get(position).getType();
         }
     }
 
@@ -169,7 +192,7 @@ public class Albums extends AppCompatActivity {
                                 .backgroundColor(R.color.red2)
                                 .enableSwipeToDismiss()
                                 .message(R.string.checkingNetwork)
-                                .enterAnimation(new FlashAnimBarBuilder(Albums.this).slideFromRight().duration(200))
+                                .enterAnimation(new FlashAnimBarBuilder(ProfileMedia.this).slideFromRight().duration(200))
                                 .build().show();
                     }
                 });
