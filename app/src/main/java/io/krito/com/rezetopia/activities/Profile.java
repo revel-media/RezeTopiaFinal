@@ -6,7 +6,6 @@ import android.graphics.PorterDuff;
 import android.net.NetworkInfo;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,7 +54,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     LinearLayoutManager layoutManager;
     ProgressBar progressBar;
     ImageView backView;
-    SwipeRefreshLayout refreshLayout;
     String cursor = "0";
 
     NewsFeed newsFeed;
@@ -90,8 +88,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         profileHeader = findViewById(R.id.profileHeader);
         recyclerView = findViewById(R.id.profilePostsRecyclerView);
         progressBar = findViewById(R.id.profileProgress);
-        refreshLayout = findViewById(R.id.profileSwipeView);
-
         progressBar.getIndeterminateDrawable().setColorFilter(getResources()
                 .getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
 
@@ -101,13 +97,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
 
         getInfo();
-
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getInfo();
-            }
-        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -272,9 +261,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                     progressBar.setVisibility(View.GONE);
                 }
                 loadingData = false;
-                if (refreshLayout.isRefreshing()){
-                    refreshLayout.setRefreshing(false);
-                }
             }
 
             @Override
@@ -283,9 +269,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                 Log.i("news_feed_error", "onError: " + errorString);
                 Snackbar.make(profileHeader, error, BaseTransientBottomBar.LENGTH_LONG).show();
                 loadingData = false;
-                if (refreshLayout.isRefreshing()){
-                    refreshLayout.setRefreshing(false);
-                }
             }
 
             @Override
