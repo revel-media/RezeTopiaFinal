@@ -37,6 +37,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.1'
 
     //firebase
+    //implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
+    implementation 'com.pusher:push-notifications-android:0.10.2'
 //    implementation 'com.google.firebase:firebase-auth:10.2.1'
 //    implementation 'com.google.firebase:firebase-database:10.2.1'
 //    implementation 'com.google.firebase:firebase-storage:10.2.1'
@@ -168,3 +171,5 @@ dependencies {
 //    implementation 'com.google.android.gms:play-services:12.0.1'
 
 }
+
+apply plugin: 'com.google.gms.google-services'

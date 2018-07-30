@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "750801210061",
+    "firebase_url": "https://rezetopia-1531750885573.firebaseio.com",
+    "project_id": "rezetopia-1531750885573",
+    "storage_bucket": "rezetopia-1531750885573.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750801210061:android:abb9e849f5a22d6f",
+        "android_client_info": {
+          "package_name": "io.krito.com.rezetopia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750801210061-kseqr4hbc6sj4kk35u16g27n0n94qiok.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.krito.com.rezetopia",
+            "certificate_hash": "794f838bc7c21e340803761d40e0bdc7a53ce2c9"
+          }
+        },
+        {
+          "client_id": "750801210061-q45k82906e4v095dbpqqm100ebs4si3q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYRO9wh1BRdPuwaNZYJaYBCo3s_4b05LM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "750801210061-q45k82906e4v095dbpqqm100ebs4si3q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

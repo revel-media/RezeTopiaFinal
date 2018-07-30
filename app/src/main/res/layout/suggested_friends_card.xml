@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_margin="5dp"
+            android:id="@+id/suggestedImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@color/green7"/>
+
+        <TextView
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:layout_gravity="center_horizontal|bottom"
+            android:textColor="@color/white"
+            android:text="@string/username"
+            android:id="@+id/suggestedUsernameView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+
+
+    <Button
+        android:id="@+id/suggestedAddButton"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/post_background"
+        android:text="@string/add_friend"
+        android:layout_width="100dp"
+        android:layout_height="30dp" />
+</LinearLayout>

@@ -62,7 +62,13 @@
         <activity android:name=".activities.CreateChampionTeam" />
         <activity android:name=".activities.Friends" />
         <activity android:name=".activities.FriendsTag" />
-        <activity android:name=".activities.ProfileSetting"></activity>
+        <activity android:name=".activities.ProfileSetting"/>
+
+        <service android:name=".services.NotificationsMessagingService">
+            <intent-filter android:priority="1">
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

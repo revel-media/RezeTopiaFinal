@@ -21,6 +21,8 @@ import com.apradanas.prismoji.one.PrismojiOneProvider;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.google.firebase.FirebaseApp;
+import com.pusher.pushnotifications.PushNotifications;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +65,7 @@ public class RezetopiaApp extends Application {
         super.attachBaseContext(base);
         MultiDex.install(this);
         PrismojiManager.install(new PrismojiOneProvider());
+        //FirebaseApp.initializeApp(this);
     }
 
     @Override
@@ -75,6 +78,9 @@ public class RezetopiaApp extends Application {
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         receiver = new ConnectivityReceiver();
         registerReceiver(receiver, filter);
+
+        PushNotifications.start(getApplicationContext(), "9d103543-3c0a-4bcd-acab-7acbbcd08a34");
+        PushNotifications.subscribe("hello");
 
         /*getSharedPreferences(AppConfig.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit()
                 .putString(FirebaseInstanceId.getInstance().getToken(), AppConfig.DEVICE_TOKEN_SHARED)
