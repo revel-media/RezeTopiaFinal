@@ -61,6 +61,8 @@ import com.tangxiaolv.telegramgallery.GalleryActivity;
 import com.tangxiaolv.telegramgallery.GalleryConfig;
 import com.taskail.googleplacessearchdialog.SimplePlacesSearchDialog;
 import com.taskail.googleplacessearchdialog.SimplePlacesSearchDialogBuilder;
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiPopup;
 //import com.taskail.googleplacessearchdialog.SimplePlacesSearchDialog;l
 //import com.taskail.googleplacessearchdialog.SimplePlacesSearchDialogBuilder;
 
@@ -146,6 +148,8 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
     private PrismojiPopup prismojiPopup;
     private ArrayList<Friend> tags;
     private AddedTagsRecyclerAdapter tagsRecyclerAdapter;
+    private String apiUrl;
+    private int pageId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +180,10 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
         createPostRoot = findViewById(R.id.createPostRoot);
         addedTagsRecyclerView = findViewById(R.id.tagRecView);
 
-
+        if (getIntent().getExtras() != null) {
+            apiUrl = getIntent().getExtras().getString("url", null);
+            pageId = getIntent().getExtras().getInt("pageId", 0);
+        }
 
         createPost.setOnClickListener(this);
         privacyText.setOnClickListener(this);
@@ -190,6 +197,7 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
         postText.setOnClickListener(this);
         tag.setOnClickListener(this);
 
+//        emojiPopup = EmojiPopup.Builder.fromRootView(createPostRoot).build(postText);
         prismojiPopup = PrismojiPopup.Builder
                 .fromRootView(createPostRoot)
                 .into(postText)
@@ -520,7 +528,8 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
     }
 
     private void createPostMultiPart() {
-        VolleyMultipartRequest request = new VolleyMultipartRequest(Request.Method.POST, "https://rezetopia.com/Apis/posts",
+        String url = (apiUrl == null || apiUrl.isEmpty()) ? "https://rezetopia.com/Apis/posts" : apiUrl;
+        VolleyMultipartRequest request = new VolleyMultipartRequest(Request.Method.POST, url,
                 new Response.Listener<NetworkResponse>() {
                     @Override
                     public void onResponse(NetworkResponse response) {
@@ -608,12 +617,15 @@ public class CreatePost extends AppCompatActivity implements View.OnClickListene
                 Log.i("uploadTest", "getParams: data");
                 Map<String, String> params = new HashMap<>();
                 params.put("method", "multipart_image_post");
+                if (apiUrl != null && !apiUrl.isEmpty()){
+                    params.put("page_id", String.valueOf(pageId));
+                }
+
                 params.put("userId", userId);
                 //params.put("description", postText.getText().toString());
                 try {
                     params.put("description", URLEncoder.encode(postText.getText().toString(), "UTF-8"));
                     Log.i("postDescriptionEncode", "getParams: " + URLEncoder.encode(postText.getText().toString(), "UTF-8"));
-                    Log.i("postDescriptionEncode", "getParams: " + URLDecoder.decode(postText.getText().toString(), "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

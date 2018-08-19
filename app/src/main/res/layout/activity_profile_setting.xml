@@ -27,16 +27,28 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/generalSetting"
             android:layout_margin="@dimen/dimen_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
+            <FrameLayout
                 android:layout_margin="5dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@color/colorPrimary"/>
+                android:background="@color/colorPrimaryDark">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/namewhite"
+                    android:layout_margin="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                />
+            </FrameLayout>
+
+
 
             <LinearLayout
                 android:layout_marginStart="@dimen/dimen_10"
@@ -68,16 +80,28 @@
             android:layout_marginStart="@dimen/dimen_10"/>
 
         <LinearLayout
+            android:id="@+id/playerSetting"
             android:layout_margin="@dimen/dimen_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
+            <FrameLayout
                 android:layout_margin="5dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@color/colorPrimary"/>
+                android:background="@color/colorPrimaryDark">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_fir_ball"
+                    android:layout_margin="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    />
+            </FrameLayout>
+
+
 
             <LinearLayout
                 android:layout_marginStart="@dimen/dimen_10"
@@ -114,11 +138,20 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
+            <FrameLayout
                 android:layout_margin="5dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@color/colorPrimary"/>
+                android:background="@color/colorPrimaryDark">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/passwordwhite"
+                    android:layout_margin="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    />
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_marginStart="@dimen/dimen_10"

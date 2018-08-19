@@ -16,11 +16,12 @@ public class CustomLinearLayoutManager extends LinearLayoutManager {
 
     public CustomLinearLayoutManager(Context context) {
         super(context);
-
+        setAutoMeasureEnabled(false);
     }
 
     public CustomLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
         super(context, orientation, reverseLayout);
+        setAutoMeasureEnabled(false);
     }
 
     private int[] mMeasuredDimension = new int[2];

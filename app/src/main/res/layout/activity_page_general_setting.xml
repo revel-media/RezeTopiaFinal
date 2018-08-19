@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.krito.com.rezetopia.activities.GeneralSetting">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context="io.krito.com.rezetopia.activities.GeneralSetting"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/green7">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_marginStart="@dimen/dimen_10"
+                android:layout_gravity="start|center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_back"/>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="220dp"/>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/all_setting"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:padding="@dimen/dimen_20"
+            android:background="@drawable/border"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textColor="@color/colorPrimary"/>
+
+            <EditText
+                android:inputType="textPersonName"
+                android:textSize="14sp"
+                android:id="@+id/pageName"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="@dimen/dimen_20"
+                android:layout_marginEnd="@dimen/dimen_20"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/edit_border"
+                android:hint="@string/name"
+                android:paddingStart="@dimen/dimen_20"
+                android:paddingEnd="20dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
+                android:textColor="@color/colorPrimary"/>
+
+            <EditText
+                android:inputType="text"
+                android:textSize="14sp"
+                android:id="@+id/address"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="@dimen/dimen_20"
+                android:layout_marginEnd="@dimen/dimen_20"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/edit_border"
+                android:hint="@string/address"
+                android:paddingStart="@dimen/dimen_20"
+                android:paddingEnd="20dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/phone"
+                android:textColor="@color/colorPrimary"/>
+
+            <EditText
+                android:textSize="14sp"
+                android:id="@+id/phoneText"
+                android:inputType="phone"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="@dimen/dimen_20"
+                android:layout_marginEnd="@dimen/dimen_20"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/edit_border"
+                android:hint="@string/phone"
+                android:paddingStart="@dimen/dimen_20"
+                android:paddingEnd="20dp"
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/website"
+                android:textColor="@color/colorPrimary"/>
+
+            <EditText
+                android:textSize="14sp"
+                android:id="@+id/websiteText"
+                android:inputType="textUri"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="@dimen/dimen_20"
+                android:layout_marginEnd="@dimen/dimen_20"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/edit_border"
+                android:hint="@string/website"
+                android:paddingStart="@dimen/dimen_20"
+                android:paddingEnd="20dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about"
+                android:textColor="@color/colorPrimary"/>
+
+            <EditText
+                android:textSize="14sp"
+                android:id="@+id/about"
+                android:inputType="text"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="@dimen/dimen_20"
+                android:layout_marginEnd="@dimen/dimen_20"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/edit_border"
+                android:hint="@string/about"
+                android:paddingStart="@dimen/dimen_20"
+                android:paddingEnd="20dp"
+                android:textColor="@color/black"/>
+
+            <io.rmiri.buttonloading.ButtonLoading
+                android:layout_gravity="center"
+                android:id="@+id/generalSave"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="@dimen/small_margin"
+                android:paddingBottom="@dimen/small_margin"
+                android:layout_marginLeft="@dimen/extra_extra_large_margin70"
+                android:layout_marginRight="@dimen/extra_extra_large_margin70"
+                app:BL_backgroundColor="@color/green5"
+                app:BL_circleColor="@color/colorPrimaryDark"
+                app:BL_circleColorSecond="@color/green5"
+                app:BL_enable="true"
+                app:BL_stateShow="normal"
+                app:BL_text="@string/save_changes"
+                app:BL_textColor="@color/white"
+                app:BL_textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

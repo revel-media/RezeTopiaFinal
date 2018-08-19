@@ -9,11 +9,14 @@
     <string name="skip_login">skip log in</string>
     <string name="mobile">Mobile</string>
     <string name="name">Name</string>
+    <string name="height_hint">Height in cm</string>
+    <string name="update_password">Update Password</string>
+    <string name="weight_hint">Weight in kg</string>
     <string name="player_name">Player Name</string>
     <string name="email">Email</string>
     <string name="date_of_birth">Date Of Birth</string>
     <string name="repassword">Re-Password</string>
-    <string name="next">NEXT</string>
+    <string name="next">Next</string>
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
     <string name="english">English</string>
@@ -27,6 +30,10 @@
     <string name="number_of_teams"># teams</string>
     <string name="number_of_players"># players</string>
     <string name="six">6</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
+    <string name="current_password_hint">Enter current password</string>
+    <string name="new_password_hint">Enter new password</string>
 
 
     <string name="phone">Phone number</string>
@@ -58,8 +65,12 @@
     <string name="general_setting">General Setting</string>
     <string name="player_info">Player Information</string>
     <string name="general_setting_hint">You can change general settings</string>
+    <string name="page_like_hint">See who likes this page</string>
+    <string name="who_can_post">Who can post on this page</string>
+    <string name="page_name_error">Page name can not be empty</string>
     <string name="player_setting">Player Setting</string>
     <string name="privacy_setting">Privacy Setting</string>
+    <string name="page_likes">Page Likes</string>
     <string name="privacy_setting_hint">Change privacy setting here</string>
     <string name="hobbies">Hobbies</string>
     <string name="interests">Interests</string>
@@ -92,6 +103,7 @@
     <string name="tell_something">Tell something&#8230;</string>
     <string name="add">Add +</string>
     <string name="unfriend">Unfriend</string>
+    <string name="unlike">Unlike</string>
     <string name="load_more">Load more&#8230;</string>
     <string name="more">More</string>
     <string name="less">Less</string>
@@ -130,16 +142,20 @@
     <string name="paste">Paste</string>
     <string name="dont_have_posts">You do not have posts yet</string>
     <string name="welcome_page">Play With Rezetopia</string>
+    <string name="pages">Pages</string>
     <string name="remove">Remove</string>
     <string name="text_saved">Copied to Clipboard</string>
     <string name="save_post">Save post</string>
+    <string name="save_changes">Save changes</string>
     <string name="unsave_post">Remove</string>
     <string name="report_post">Report</string>
     <string name="image">Image</string>
     <string name="photos">Photos</string>
+    <string name="admins">Admins</string>
     <string name="videos">Videos</string>
     <string name="skills">Skills</string>
     <string name="about">About</string>
+    <string name="website">Website</string>
     <string name="bio">Bio</string>
     <string name="general_information">General Information</string>
     <string name="video">Video</string>
@@ -160,6 +176,8 @@
     <string name="buy">Buy now</string>
     <string name="sold_out">Sold out</string>
     <string name="member">member</string>
+    <string name="members">members</string>
+    <string name="people_likes">people who like this</string>
     <string name="home">Home</string>
     <string name="report">Report</string>
     <string name="add_friend">Add Friend</string>
@@ -169,6 +187,7 @@
     <string name="view">View</string>
     <string name="copy">Copy</string>
     <string name="update_pp">Update profile picture</string>
+    <string name="updated">Updated</string>
     <string name="update_cover">Update cover photo</string>
     <string name="create_team">Create Team</string>
     <string name="owner">Owner</string>
@@ -237,6 +256,21 @@
         <item>012</item>
 
     </string-array>
+    <!-- player setting -->
+    <string name="lwf">LWF</string>
+    <string name="cf">CF</string>
+    <string name="rwf">RWF</string>
+    <string name="ss">SS</string>
+    <string name="am">AM</string>
+    <string name="lm">LM</string>
+    <string name="rm">RM</string>
+    <string name="cm">CM</string>
+    <string name="dm">DM</string>
+    <string name="lb">LP</string>
+    <string name="cb">CB</string>
+    <string name="rb">RB</string>
+    <string name="sw">SW</string>
+    <string name="gk">GK</string>
 
     <string-array name="spinner_city">
         <item>select city</item>

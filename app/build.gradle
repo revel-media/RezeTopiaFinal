@@ -63,7 +63,7 @@ dependencies {
     //run time permission
     implementation 'com.karumi:dexter:4.2.0'
 
-    //progress loading
+    //page loading
     implementation 'id.arieridwan:pageloader:0.0.2'
 
     //image picker
@@ -170,6 +170,16 @@ dependencies {
 //    implementation 'com.google.android.gms:play-services-gcm:12.0.1'
 //    implementation 'com.google.android.gms:play-services:12.0.1'
 
+    //ios-emoj
+    compile 'com.vanniktech:emoji-ios:0.5.1'
 }
+
+
+
+
+
+
+
+
 
 apply plugin: 'com.google.gms.google-services'

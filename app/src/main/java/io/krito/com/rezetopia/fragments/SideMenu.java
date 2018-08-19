@@ -19,7 +19,9 @@ import io.krito.com.rezetopia.R;
 import io.krito.com.rezetopia.activities.CreateChampion;
 import io.krito.com.rezetopia.activities.CreateGroup;
 import io.krito.com.rezetopia.activities.Login;
+import io.krito.com.rezetopia.activities.Pages;
 import io.krito.com.rezetopia.activities.Profile;
+import io.krito.com.rezetopia.activities.ProfileSetting;
 import io.krito.com.rezetopia.activities.SavedPosts;
 import io.krito.com.rezetopia.application.AppConfig;
 import io.krito.com.rezetopia.application.RezetopiaApp;
@@ -36,6 +38,8 @@ public class SideMenu extends Fragment implements ConnectivityReceiver.Connectiv
     TextView savedPosts;
     TextView createGroupView;
     TextView champion;
+    TextView setting;
+    TextView pages;
 
     @Nullable
     @Override
@@ -50,12 +54,16 @@ public class SideMenu extends Fragment implements ConnectivityReceiver.Connectiv
         savedPosts = view.findViewById(R.id.sideSavedPostsView);
         createGroupView = view.findViewById(R.id.createGroupView);
         champion = view.findViewById(R.id.champion);
+        setting = view.findViewById(R.id.setting);
+        pages = view.findViewById(R.id.pages);
 
         myProfileView.setOnClickListener(this);
         logoutView.setOnClickListener(this);
         savedPosts.setOnClickListener(this);
         createGroupView.setOnClickListener(this);
         champion.setOnClickListener(this);
+        setting.setOnClickListener(this);
+        pages.setOnClickListener(this);
 
         return view;
     }
@@ -99,6 +107,12 @@ public class SideMenu extends Fragment implements ConnectivityReceiver.Connectiv
             case R.id.champion:
                 championSheetMenu();
                 break;
+            case R.id.setting:
+                Intent intent3 = new Intent(getActivity(), ProfileSetting.class);
+                startActivity(intent3);
+            case R.id.pages:
+                Intent intent4 = new Intent(getActivity(), Pages.class);
+                startActivity(intent4);
         }
     }
 

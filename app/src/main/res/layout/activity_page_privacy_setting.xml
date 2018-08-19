@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="io.krito.com.rezetopia.activities.GeneralSetting"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/green7">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_marginStart="@dimen/dimen_10"
+            android:layout_gravity="start|center"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_back"/>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="220dp"/>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/all_setting"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:padding="@dimen/dimen_20"
+        android:background="@drawable/border"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/who_can_post"
+            android:textColor="@color/colorPrimary"/>
+
+        <LinearLayout
+            android:background="@drawable/edit_border"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:layout_marginStart="@dimen/dimen_20"
+            android:layout_marginEnd="@dimen/dimen_20">
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/teams_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/edit_border"
+                app:ms_arrow_tint="@color/green2"
+                app:ms_text_color="@color/black"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+        <io.rmiri.buttonloading.ButtonLoading
+            android:layout_gravity="center"
+            android:id="@+id/generalSave"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/small_margin"
+            android:paddingBottom="@dimen/small_margin"
+            android:layout_marginLeft="@dimen/extra_extra_large_margin70"
+            android:layout_marginRight="@dimen/extra_extra_large_margin70"
+            app:BL_backgroundColor="@color/green5"
+            app:BL_circleColor="@color/colorPrimaryDark"
+            app:BL_circleColorSecond="@color/green5"
+            app:BL_enable="true"
+            app:BL_stateShow="normal"
+            app:BL_text="@string/save_changes"
+            app:BL_textColor="@color/white"
+            app:BL_textSize="12sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

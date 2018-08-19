@@ -36,6 +36,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -557,11 +559,12 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (!(item.getPostText() == null || item.getPostText().contentEquals("null"))) {
                 postTextView.setText(item.getPostText());
-//                try {
-//                    postTextView.setText(URLDecoder.decode(item.getPostText(), "UTF-8"));
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    postTextView.setText(URLDecoder.decode(item.getPostText(), "UTF-8"));
+                    Log.i("PostText", "bindURLDecoder: " + item.getPostText());
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 Log.i("PostText", "bind: " + item.getPostText());
             } else {
                 postTextView.setText("");

@@ -23,6 +23,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.FirebaseApp;
 import com.pusher.pushnotifications.PushNotifications;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,6 +67,7 @@ public class RezetopiaApp extends Application {
         super.attachBaseContext(base);
         MultiDex.install(this);
         PrismojiManager.install(new PrismojiOneProvider());
+        EmojiManager.install(new IosEmojiProvider());
         //FirebaseApp.initializeApp(this);
     }
 

@@ -63,6 +63,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
     int start = 0, end = 0;
     boolean loadingData = false;
+    int pastVisibleItem = 0;
 
     String profileOwnerUserId;
     String loggedInUserId;
@@ -99,8 +100,30 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         backView.setVisibility(View.VISIBLE);
         backView.setOnClickListener(this);
 
+        if (savedInstanceState != null && savedInstanceState.getSerializable("feed") != null){
+            Log.i("USER_ID_PROFILE", "onCreateView: " + profileOwnerUserId);
 
-        getInfo();
+            newsFeed = (NewsFeed) savedInstanceState.getSerializable("feed");
+            user = (User) savedInstanceState.getSerializable("user");
+            isFriend = savedInstanceState.getBoolean("isFriend");
+            friendState = savedInstanceState.getBoolean("friendState");
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    updateUi(0, 0);
+                    recyclerView.scrollToPosition(savedInstanceState.getInt("last"));
+                    if (newsFeed.getItems().size() > 0){
+                        progressBar.setVisibility(View.GONE);
+                        //dontHavePosts.setVisibility(View.VISIBLE);
+                    }
+                    //adapter.notifyDataSetChanged();
+                }
+            });
+        } else {
+            Log.i("USER_ID", "onCreateView: " + profileOwnerUserId);
+            getInfo();
+        }
+
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -118,11 +141,11 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                 if (dy > 0) {
                     int visibleItemCount = layoutManager.getChildCount();
                     int totalItemCount = layoutManager.getItemCount();
-                    int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+                    pastVisibleItem = layoutManager.findFirstVisibleItemPosition();
                     int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
 
 
-                    if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                    if ((visibleItemCount + pastVisibleItem) >= totalItemCount) {
                         //Snackbar.make(homeHeader, R.string.loading, BaseTransientBottomBar.LENGTH_LONG).show();
                         //adapter.notifyItemInserted(adapter.addItem());
                         if (!loadingData) {
@@ -596,5 +619,17 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                                 .build().show();
                     }
                 });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (newsFeed != null) {
+            outState.putSerializable("feed", newsFeed);
+            outState.putSerializable("user", user);
+            outState.putBoolean("isFriend", isFriend);
+            outState.putBoolean("friendState", friendState);
+            outState.putInt("last", pastVisibleItem);
+        }
     }
 }

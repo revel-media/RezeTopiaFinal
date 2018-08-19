@@ -131,6 +131,7 @@
                 android:id="@+id/textHeader">
 
 
+                <!--app:emojiSize="26sp"-->
                 <com.apradanas.prismoji.PrismojiEditText
                     android:textAlignment="viewStart"
                     android:paddingRight="@dimen/dimen_10"
@@ -147,7 +148,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/post_text_background"
-                    app:emojiSize="26sp" />
+                    android:imeOptions="actionSend"
+                    android:inputType="textCapSentences|textMultiLine"/>
 
                 <ImageView
                     android:layout_marginTop="5dp"

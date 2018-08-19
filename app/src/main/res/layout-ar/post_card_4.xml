@@ -18,6 +18,7 @@
         android:layout_marginBottom="@dimen/dimen_10"/>
 
     <LinearLayout
+        android:layout_below="@id/likeCommentHeaderLayout"
         android:id="@+id/headerLayout"
         android:weightSum="2"
         android:layout_marginTop="10dp"
@@ -44,11 +45,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:textSize="12sp"
                         android:id="@+id/postUserName"
                         android:layout_marginStart="0dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="12sp"
                         android:text="username"
                         android:textColor="@android:color/black"/>
 
@@ -112,7 +113,9 @@
                         android:id="@+id/isWith"/>
 
                     <TextView
+                        android:maxLines="2"
                         android:textSize="12sp"
+                        android:id="@+id/with1"
                         android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -121,6 +124,7 @@
                         android:layout_marginStart="5dp"/>
 
                     <TextView
+                        android:maxLines="2"
                         android:textSize="12sp"
                         android:visibility="gone"
                         android:layout_width="wrap_content"
@@ -130,7 +134,9 @@
                         android:id="@+id/and"/>
 
                     <TextView
+                        android:maxLines="2"
                         android:textSize="12sp"
+                        android:id="@+id/with2"
                         android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -139,6 +145,7 @@
                         android:layout_marginStart="5dp"/>
 
                     <TextView
+                        android:maxLines="2"
                         android:textSize="12sp"
                         android:visibility="gone"
                         android:layout_marginStart="5dp"
@@ -148,6 +155,7 @@
                         android:id="@+id/at"/>
 
                     <TextView
+                        android:maxLines="2"
                         android:textSize="12sp"
                         android:textColor="@color/black"
                         android:layout_marginStart="5dp"
@@ -158,7 +166,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
 

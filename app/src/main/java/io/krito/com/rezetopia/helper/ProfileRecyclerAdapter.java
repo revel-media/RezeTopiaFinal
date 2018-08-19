@@ -104,8 +104,6 @@ public class ProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         //callback.onSetItem(index);
     }
 
-
-
     public void addItem() {
         NewsFeedItem item = new NewsFeedItem();
         item.setType(1009);

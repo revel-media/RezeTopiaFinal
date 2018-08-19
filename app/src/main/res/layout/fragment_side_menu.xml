@@ -46,11 +46,32 @@
             android:textColor="@color/green7"
             android:textSize="15sp"/>
 
+
+        <TextView
+            android:layout_margin="@dimen/dimen_10"
+            android:layout_below="@+id/champion"
+            android:id="@+id/pages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pages"
+            android:textColor="@color/green7"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_margin="@dimen/dimen_10"
+            android:layout_below="@+id/pages"
+            android:id="@+id/setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/setting"
+            android:textColor="@color/green7"
+            android:textSize="15sp"/>
+
         <TextView
             android:id="@+id/logoutView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/champion"
+            android:layout_below="@id/setting"
             android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/dimen_10"
             android:text="@string/log_out"

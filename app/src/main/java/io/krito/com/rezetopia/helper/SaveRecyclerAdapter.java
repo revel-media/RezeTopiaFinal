@@ -50,7 +50,7 @@ import io.krito.com.rezetopia.models.pojo.news_feed.NewsFeedItem;
 import ru.whalemare.sheetmenu.SheetMenu;
 
 /**
- * Created by Mona Abdallh on 6/30/2018.
+ * Created by Ahmed Ali on 6/30/2018.
  */
 
 public class SaveRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{

@@ -61,12 +61,9 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
     ProgressBar progressBar;
     String cursor = "0";
     int pastVisibleItems;
-    Merlin merlinConn;
-    Merlin merlinDisConn;
 
     NewsFeed newsFeed;
     String userId;
-    ArrayList<NewsFeedItem> tempItems;
     PostRecyclerAdapter adapter;
     HomeCallback homeCallback;
 
@@ -361,7 +358,6 @@ public class Home extends Fragment implements ConnectivityReceiver.ConnectivityR
     public interface HomeCallback {
         void onScroll(boolean show);
     }
-
 
     @Override
     public void onAttach(Context context) {

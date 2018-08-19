@@ -41,6 +41,13 @@
     <string name="ef_ok">ارسال</string>
     <string name="terms">اوافق على شروط التسجيل</string>
     <string name="name">الاسم</string>
+    <string name="weight_hint">الوزن بالكيلو</string>
+    <string name="height_hint">الطول بالسم</string>
+    <string name="update_password">تغيير كلمة المرور</string>
+    <string name="current_password">كلمة الرور الحالية</string>
+    <string name="new_password">كلمة المرور الجديدة</string>
+    <string name="current_password_hint">ادخل كلمة المرور الحالية</string>
+    <string name="new_password_hint">ادخل كلمة المرور الجديدة</string>
     <string name="player_name">اسم الاعب</string>
     <string name="six">0</string>
     <string name="date_of_birth">تاريخ الميلاد</string>
@@ -53,6 +60,7 @@
     <string name="my_coins">نقودي</string>
     <string name="my_orders">طلباتي</string>
     <string name="setting">الاعدادت</string>
+    <string name="pages">صفحاتي</string>
     <string name="report_to_rezetopia">بلاغ لريزيتوبيا</string>
     <string name="log_out">خروج</string>
     <string name="english">English</string>
@@ -67,6 +75,7 @@
     <string name="cancel_friend_request">حذف الطلب</string>
     <string name="respond_friend_request">رد</string>
     <string name="unfriend">حذف</string>
+    <string name="unlike">ازالة الاعجاب</string>
     <string name="search">بحث</string>
     <string name="booking">حجز</string>
     <string name="privacy">الخصوصية</string>
@@ -74,13 +83,30 @@
     <string name="friends_of_friends">اصدقاء الاصدقاء</string>
     <string name="only_me">انا فقط</string>
 
+    <string name="admins">المسئولين</string>
     <string name="photos">الصور</string>
     <string name="videos">الفيديو</string>
     <string name="skills">المهارات</string>
     <string name="about">تفاصيل</string>
+    <string name="website">الموقع الالكترونى</string>
     <string name="no_posts">there are no posts</string>
 
 
+    <!--player setting-->
+    <string name="lwf">LWF</string>
+    <string name="cf">CF</string>
+    <string name="rwf">RWF</string>
+    <string name="ss">SS</string>
+    <string name="am">AM</string>
+    <string name="lm">LM</string>
+    <string name="rm">RM</string>
+    <string name="cm">CM</string>
+    <string name="dm">DM</string>
+    <string name="lb">LP</string>
+    <string name="cb">CB</string>
+    <string name="rb">RB</string>
+    <string name="sw">SW</string>
+    <string name="gk">GK</string>
 
 
 
@@ -119,8 +145,12 @@
     <string name="checkingNetwork">هناك خطا في الاتصال بالانترنت</string>
     <string name="general_setting">الاعدادات العامة</string>
     <string name="general_setting_hint">بأمكانك تغيير الاعدادات العامة</string>
+    <string name="page_like_hint">تعرف على اعجابات الصفحة</string>
+    <string name="who_can_post">من له الصلاحية للنشر فى الصفحة</string>
+    <string name="page_name_error">اسم الصفحة لايمكن ان يكون فارغ</string>
     <string name="player_setting">اعدادات الاعب</string>
     <string name="privacy_setting">اعدادات الخصوصية</string>
+    <string name="page_likes">الاعجابات</string>
     <string name="privacy_setting_hint">تغيير اعادادات الخصوصية من هنا</string>
     <string name="hobbies">هوايات</string>
     <string name="interests">اهتمامات</string>
@@ -195,6 +225,7 @@
     <string name="remove">ازالة</string>
     <string name="text_saved">تم النسخ</string>
     <string name="save_post">حفظ المنشور</string>
+    <string name="save_changes">حفظ التغيرات</string>
     <string name="unsave_post">ازالة</string>
     <string name="copy">نسخ</string>
     <string name="report_post">ابلاغ</string>
@@ -213,6 +244,8 @@
     <string name="buy">اشتري الان</string>
     <string name="sold_out">تباع</string>
     <string name="member">عضو</string>
+    <string name="members">الاعضاء</string>
+    <string name="people_likes">المعجبون بالصفحة</string>
     <string name="home">الرئيسية</string>
     <string name="report">ابلاغ</string>
     <string name="add_friend">اضافة صديق</string>
@@ -223,6 +256,7 @@
     <string name="owner">المالك</string>
     <string name="view">عرض الصورة</string>
     <string name="update_pp">تغيير الصورة</string>
+    <string name="updated">تم</string>
     <string name="update_cover">تغيير صورة الغلاف</string>
     <string name="no_image">لا توجد صورة</string>
     <string name="vendors">البائعين</string>
