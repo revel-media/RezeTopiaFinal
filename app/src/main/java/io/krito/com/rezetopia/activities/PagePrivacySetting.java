@@ -52,6 +52,8 @@ public class PagePrivacySetting extends AppCompatActivity {
             role = item.toString();
         });
 
+        //todo new
+
         save.setOnClickListener(v -> {
             save.setProgress(true);
             submitData();
