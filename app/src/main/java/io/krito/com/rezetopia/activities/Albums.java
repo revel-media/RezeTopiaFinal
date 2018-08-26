@@ -49,6 +49,7 @@ public class Albums extends AppCompatActivity {
     AlbumsAdapter adapter;
 
     public static Intent createIntent(Context context, String id){
+        //todo
         Intent intent = new Intent(context, Albums.class);
         intent.putExtra(id, USER_ID_EXTRA);
         return intent;
